@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Admin Dashboard | Smart Healthcare</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --p: #833cf6;
+            --pg: rgba(131, 60, 246, .25);
+            --ph: #9a5dfc;
+            --ps: rgba(131, 60, 246, .12);
+            --bd: #0d0a14;
+            --bc: #151020;
+            --bi: #1c1630;
+            --br: #2a2240;
+            --bl: #352d4a;
+            --t1: #f1f0f5;
+            --t2: #9891a8;
+            --tm: #6b6380;
+            --g: #22c55e;
+            --gs: rgba(34, 197, 94, .12);
+            --a: #f59e0b;
+            --as: rgba(245, 158, 11, .12);
+            --r: #ef4444;
+            --rs: rgba(239, 68, 68, .12);
+            --b: #3b82f6;
+            --bs: rgba(59, 130, 246, .12);
+            --cy: #06b6d4;
+            --cs: rgba(6, 182, 212, .12)
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bd);
+            color: var(--t1);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .85rem 2rem;
+            border-bottom: 1px solid var(--br);
+            position: sticky;
+            top: 0;
+            background: rgba(13, 10, 20, .88);
+            backdrop-filter: blur(16px);
+            z-index: 100
+        }
+
+        .hdr-brand {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            color: var(--p)
+        }
+
+        .hdr-brand svg {
+            width: 30px;
+            height: 30px
+        }
+
+        .hdr-brand h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--t1)
+        }
+
+        .hdr-r {
+            display: flex;
+            align-items: center;
+            gap: .7rem
+        }
+
+        .ib {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--bi);
+            border: 1px solid var(--br);
+            color: var(--t2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .ib:hover {
+            background: var(--ps);
+            border-color: var(--p);
+            color: var(--p)
+        }
+
+        .ib .bd {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--r);
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff
+        }
+
+        .av {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--p), #6320c9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .8rem;
+            color: #fff;
+            border: 2px solid var(--br)
+        }
+
+        .pg {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            position: relative;
+            z-index: 5
+        }
+
+        /* Stats */
+        .sg {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem
+        }
+
+        .sc {
+            background: var(--bc);
+            border: 1px solid var(--br);
+            border-radius: 14px;
+            padding: 1.15rem;
+            transition: .2s
+        }
+
+        .sc:hover {
+            border-color: var(--bl);
+            transform: translateY(-2px)
+        }
+
+        .si {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: .65rem
+        }
+
+        .si .material-symbols-outlined {
+            font-size: 22px
+        }
+
+        .si.pu {
+            background: var(--ps);
+            color: var(--p)
+        }
+
+        .si.gr {
+            background: var(--gs);
+            color: var(--g)
+        }
+
+        .si.am {
+            background: var(--as);
+            color: var(--a)
+        }
+
+        .si.bl {
+            background: var(--bs);
+            color: var(--b)
+        }
+
+        .si.rd {
+            background: var(--rs);
+            color: var(--r)
+        }
+
+        .sv {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -.03em
+        }
+
+        .sl {
+            font-size: .72rem;
+            color: var(--tm);
+            margin-top: .1rem
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bi);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem
+        }
+
+        .tab {
+            flex: 1;
+            padding: .6rem;
+            text-align: center;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--t2);
+            border: none;
+            background: 0;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: .25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px
+        }
+
+        .tab .material-symbols-outlined {
+            font-size: 17px
+        }
+
+        .tab.active {
+            background: var(--p);
+            color: #fff;
+            box-shadow: 0 4px 14px var(--pg)
+        }
+
+        /* Section */
+        .sec {
+            background: var(--bc);
+            border: 1px solid var(--br);
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            display: none
+        }
+
+        .sec.active {
+            display: block;
+            animation: fi .35s ease
+        }
+
+        @keyframes fi {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .sh {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--br)
+        }
+
+        .st {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: 1rem;
+            font-weight: 700
+        }
+
+        .st .material-symbols-outlined {
+            font-size: 20px;
+            color: var(--p)
+        }
+
+        .sb {
+            padding: 1rem 1.5rem
+        }
+
+        /* Search */
+        .search-wrap {
+            position: relative;
+            margin-bottom: 1rem
+        }
+
+        .search-wrap .material-symbols-outlined {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--tm)
+        }
+
+        .search-inp {
+            width: 100%;
+            height: 42px;
+            padding: 0 1rem 0 42px;
+            background: var(--bi);
+            border: 1px solid var(--br);
+            border-radius: 10px;
+            color: var(--t1);
+            font-family: inherit;
+            font-size: .82rem;
+            outline: 0;
+            transition: .2s
+        }
+
+        .search-inp:focus {
+            border-color: var(--p);
+            box-shadow: 0 0 0 3px var(--pg)
+        }
+
+        /* Table */
+        .tbl {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .tbl th {
+            text-align: left;
+            font-size: .68rem;
+            font-weight: 700;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            padding: .6rem .75rem;
+            border-bottom: 1px solid var(--br)
+        }
+
+        .tbl td {
+            padding: .75rem;
+            font-size: .8rem;
+            border-bottom: 1px solid rgba(42, 34, 64, .4);
+            vertical-align: middle
+        }
+
+        .tbl tr:hover td {
+            background: rgba(131, 60, 246, .04)
+        }
+
+        .tbl .name-cell {
+            display: flex;
+            align-items: center;
+            gap: .65rem
+        }
+
+        .tbl .av-xs {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .65rem;
+            color: #fff;
+            flex-shrink: 0
+        }
+
+        .tbl .nm {
+            font-weight: 600
+        }
+
+        .tbl .sub {
+            font-size: .68rem;
+            color: var(--t2)
+        }
+
+        .badge {
+            padding: .2rem .55rem;
+            border-radius: 20px;
+            font-size: .62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            white-space: nowrap
+        }
+
+        .badge.g {
+            background: var(--gs);
+            color: var(--g)
+        }
+
+        .badge.b {
+            background: var(--bs);
+            color: var(--b)
+        }
+
+        .badge.a {
+            background: var(--as);
+            color: var(--a)
+        }
+
+        .badge.r {
+            background: var(--rs);
+            color: var(--r)
+        }
+
+        .badge.c {
+            background: var(--cs);
+            color: var(--cy)
+        }
+
+        /* Disease Map */
+        .map-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem
+        }
+
+        .map-card {
+            background: var(--bi);
+            border: 1px solid var(--br);
+            border-radius: 12px;
+            overflow: hidden
+        }
+
+        .map-card-hdr {
+            padding: .85rem 1rem;
+            border-bottom: 1px solid var(--br);
+            font-size: .85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .map-card-hdr .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--p)
+        }
+
+        .map-card-body {
+            padding: 1rem
+        }
+
+        /* Hotspot list */
+        .hs-list {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem
+        }
+
+        .hs-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem .85rem;
+            background: var(--bc);
+            border: 1px solid var(--br);
+            border-radius: 10px
+        }
+
+        .hs-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0
+        }
+
+        .hs-icon .material-symbols-outlined {
+            font-size: 18px
+        }
+
+        .hs-info {
+            flex: 1
+        }
+
+        .hs-name {
+            font-size: .82rem;
+            font-weight: 600
+        }
+
+        .hs-sub {
+            font-size: .68rem;
+            color: var(--t2)
+        }
+
+        .hs-count {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--r)
+        }
+
+        /* Alert cards */
+        .alert-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: .75rem
+        }
+
+        .alert-card {
+            padding: 1rem;
+            background: var(--bi);
+            border-radius: 12px;
+            border-left: 3px solid var(--r)
+        }
+
+        .alert-card.warn {
+            border-left-color: var(--a)
+        }
+
+        .alert-card.info {
+            border-left-color: var(--b)
+        }
+
+        .alert-card h4 {
+            font-size: .82rem;
+            font-weight: 700;
+            margin-bottom: .25rem
+        }
+
+        .alert-card p {
+            font-size: .7rem;
+            color: var(--t2);
+            line-height: 1.5
+        }
+
+        .alert-card .alert-meta {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: .4rem;
+            font-size: .62rem;
+            font-weight: 600;
+            color: var(--tm)
+        }
+
+        .alert-card .alert-meta .material-symbols-outlined {
+            font-size: 13px
+        }
+
+        /* Bar chart simple */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            height: 140px;
+            padding-top: .5rem
+        }
+
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px
+        }
+
+        .bar {
+            border-radius: 6px 6px 0 0;
+            width: 100%;
+            min-height: 4px;
+            transition: .3s
+        }
+
+        .bar-lbl {
+            font-size: .58rem;
+            color: var(--tm);
+            font-weight: 600;
+            text-align: center
+        }
+
+        .bar-val {
+            font-size: .62rem;
+            font-weight: 700
+        }
+
+        /* Footer */
+        .ftr {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: .75rem;
+            color: var(--tm);
+            border-top: 1px solid var(--br)
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--g);
+            color: #fff;
+            padding: .7rem 1.4rem;
+            border-radius: 12px;
+            font-size: .82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+            transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+            z-index: 200;
+            pointer-events: none
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0)
+        }
+
+        @media(max-width:1024px) {
+            .sg {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .map-grid {
+                grid-template-columns: 1fr
+            }
+
+            .alert-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:640px) {
+            .sg {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .tabs {
+                flex-wrap: wrap
+            }
+
+            .hdr {
+                padding: .75rem 1rem
+            }
+
+            .pg {
+                padding: 1rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Auth Guard (Admin Only) -->
+    <script>
+        (function () {
+            try {
+                const s = JSON.parse(localStorage.getItem('shSession'));
+                if (!s || !s.loggedIn) { window.location.href = 'auth.html'; return }
+                if (s.role !== 'Admin') { window.location.href = 'userindex.html'; return }
+                window.__user = s;
+            } catch { window.location.href = 'auth.html' }
+        })();
+    </script>
+
+    <header class="hdr">
+        <a href="adminindex.html" class="hdr-brand">
+            <svg fill="none" viewBox="0 0 48 48">
+                <g clip-path="url(#ca)">
+                    <path clip-rule="evenodd"
+                        d="M24 .757 47.243 24 24 47.243.757 24 24 .757ZM21 35.757V12.243L9.243 24 21 35.757Z"
+                        fill="currentColor" fill-rule="evenodd" />
+                </g>
+                <defs>
+                    <clipPath id="ca">
+                        <rect fill="#fff" height="48" width="48" />
+                    </clipPath>
+                </defs>
+            </svg>
+            <h2>Smart Healthcare — Admin</h2>
+        </a>
+        <div class="hdr-r">
+            <div class="av" id="hdrAv" title="Admin">AD</div>
+            <button class="ib" title="Logout" id="logoutBtn" style="color:var(--r)"><span
+                    class="material-symbols-outlined">logout</span></button>
+        </div>
+    </header>
+
+    <div class="pg">
+        <!-- Stats -->
+        <div class="sg">
+            <div class="sc">
+                <div class="si pu"><span class="material-symbols-outlined">groups</span></div>
+                <div class="sv">1,247</div>
+                <div class="sl">Total Patients</div>
+            </div>
+            <div class="sc">
+                <div class="si gr"><span class="material-symbols-outlined">stethoscope</span></div>
+                <div class="sv">86</div>
+                <div class="sl">Active Doctors</div>
+            </div>
+            <div class="sc">
+                <div class="si am"><span class="material-symbols-outlined">coronavirus</span></div>
+                <div class="sv">23</div>
+                <div class="sl">Active Outbreaks</div>
+            </div>
+            <div class="sc">
+                <div class="si rd"><span class="material-symbols-outlined">warning</span></div>
+                <div class="sv">7</div>
+                <div class="sl">Critical Alerts</div>
+            </div>
+            <div class="sc">
+                <div class="si bl"><span class="material-symbols-outlined">location_on</span></div>
+                <div class="sv">12</div>
+                <div class="sl">Regions Monitored</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs" id="tabs">
+            <button class="tab active" data-tab="patients"><span class="material-symbols-outlined">groups</span> Patient
+                Profiles</button>
+            <button class="tab" data-tab="doctors"><span class="material-symbols-outlined">stethoscope</span> Doctor
+                Profiles</button>
+            <button class="tab" data-tab="surveillance"><span class="material-symbols-outlined">coronavirus</span>
+                Disease Surveillance</button>
+            <button class="tab" data-tab="outbreaks"><span class="material-symbols-outlined">emergency</span> Outbreak
+                Alerts</button>
+        </div>
+
+        <!-- PATIENTS TAB -->
+        <div class="sec active" id="patients">
+            <div class="sh"><span class="st"><span class="material-symbols-outlined">groups</span> All Patient
+                    Profiles</span></div>
+            <div class="sb">
+                <div class="search-wrap"><span class="material-symbols-outlined">search</span><input class="search-inp"
+                        id="patSearch" placeholder="Search patients by name, location, or condition…" /></div>
+                <div style="overflow-x:auto">
+                    <table class="tbl" id="patTable">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Age/Gender</th>
+                                <th>Blood</th>
+                                <th>Location</th>
+                                <th>Conditions</th>
+                                <th>Last Visit</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#833cf6,#6320c9)">AM
+                                        </div>
+                                        <div>
+                                            <div class="nm">Arjun Mehta</div>
+                                            <div class="sub">SH-2024-07821</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>28 / M</td>
+                                <td>B+</td>
+                                <td>Mumbai, MH</td>
+                                <td><span class="badge a">Spondylosis</span></td>
+                                <td>Feb 28, 2024</td>
+                                <td><span class="badge g">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#e91e63,#c2185b)">PS
+                                        </div>
+                                        <div>
+                                            <div class="nm">Priya Singh</div>
+                                            <div class="sub">SH-2024-03156</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>34 / F</td>
+                                <td>A+</td>
+                                <td>Delhi, DL</td>
+                                <td><span class="badge r">Dengue</span></td>
+                                <td>Mar 5, 2024</td>
+                                <td><span class="badge r">Critical</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#ff9800,#e65100)">RK
+                                        </div>
+                                        <div>
+                                            <div class="nm">Rahul Kumar</div>
+                                            <div class="sub">SH-2024-05490</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>45 / M</td>
+                                <td>O+</td>
+                                <td>Chennai, TN</td>
+                                <td><span class="badge a">Diabetes T2</span></td>
+                                <td>Mar 1, 2024</td>
+                                <td><span class="badge g">Stable</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#4caf50,#2e7d32)">AN
+                                        </div>
+                                        <div>
+                                            <div class="nm">Ananya Nair</div>
+                                            <div class="sub">SH-2024-08912</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>22 / F</td>
+                                <td>AB-</td>
+                                <td>Kochi, KL</td>
+                                <td><span class="badge c">Viral Fever</span></td>
+                                <td>Mar 8, 2024</td>
+                                <td><span class="badge a">Monitoring</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#2196f3,#1565c0)">VR
+                                        </div>
+                                        <div>
+                                            <div class="nm">Vikram Rao</div>
+                                            <div class="sub">SH-2023-01234</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>56 / M</td>
+                                <td>O-</td>
+                                <td>Hyderabad, TS</td>
+                                <td><span class="badge r">COVID-19</span> <span class="badge a">Hypertension</span></td>
+                                <td>Mar 10, 2024</td>
+                                <td><span class="badge r">Critical</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#9c27b0,#6a1b9a)">SD
+                                        </div>
+                                        <div>
+                                            <div class="nm">Sneha Desai</div>
+                                            <div class="sub">SH-2024-06780</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>31 / F</td>
+                                <td>A-</td>
+                                <td>Pune, MH</td>
+                                <td><span class="badge b">Asthma</span></td>
+                                <td>Feb 20, 2024</td>
+                                <td><span class="badge g">Stable</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#00bcd4,#00838f)">MJ
+                                        </div>
+                                        <div>
+                                            <div class="nm">Mohit Joshi</div>
+                                            <div class="sub">SH-2024-04321</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>40 / M</td>
+                                <td>B-</td>
+                                <td>Bangalore, KA</td>
+                                <td><span class="badge r">Malaria</span></td>
+                                <td>Mar 9, 2024</td>
+                                <td><span class="badge a">Treatment</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#ff5722,#d84315)">RP
+                                        </div>
+                                        <div>
+                                            <div class="nm">Riya Patel</div>
+                                            <div class="sub">SH-2024-09102</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>27 / F</td>
+                                <td>O+</td>
+                                <td>Ahmedabad, GJ</td>
+                                <td><span class="badge c">Chikungunya</span></td>
+                                <td>Mar 11, 2024</td>
+                                <td><span class="badge r">Critical</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCTORS TAB -->
+        <div class="sec" id="doctors">
+            <div class="sh"><span class="st"><span class="material-symbols-outlined">stethoscope</span> All Doctor
+                    Profiles</span></div>
+            <div class="sb">
+                <div class="search-wrap"><span class="material-symbols-outlined">search</span><input class="search-inp"
+                        id="docSearch" placeholder="Search doctors by name or specialization…" /></div>
+                <div style="overflow-x:auto">
+                    <table class="tbl" id="docTable">
+                        <thead>
+                            <tr>
+                                <th>Doctor</th>
+                                <th>Specialization</th>
+                                <th>Experience</th>
+                                <th>Patients</th>
+                                <th>Location</th>
+                                <th>Availability</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#833cf6,#5b21b6)">PS
+                                        </div>
+                                        <div>
+                                            <div class="nm">Dr. Priya Sharma</div>
+                                            <div class="sub">MBBS, MD — SH-D-0012</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>General Physician</td>
+                                <td>12 yrs</td>
+                                <td>342</td>
+                                <td>Mumbai, MH</td>
+                                <td><span class="badge g">Available</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#e91e63,#ad1457)">RI
+                                        </div>
+                                        <div>
+                                            <div class="nm">Dr. Raghav Iyer</div>
+                                            <div class="sub">MS Ortho — SH-D-0034</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Orthopedics</td>
+                                <td>18 yrs</td>
+                                <td>276</td>
+                                <td>Chennai, TN</td>
+                                <td><span class="badge g">Available</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#ff9800,#e65100)">KN
+                                        </div>
+                                        <div>
+                                            <div class="nm">Dr. Kavitha Nair</div>
+                                            <div class="sub">BDS, MDS — SH-D-0056</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Dentistry</td>
+                                <td>9 yrs</td>
+                                <td>198</td>
+                                <td>Kochi, KL</td>
+                                <td><span class="badge a">On Leave</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#4caf50,#2e7d32)">SR
+                                        </div>
+                                        <div>
+                                            <div class="nm">Dr. Sunita Rao</div>
+                                            <div class="sub">MS Ophth — SH-D-0078</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Ophthalmology</td>
+                                <td>15 yrs</td>
+                                <td>412</td>
+                                <td>Hyderabad, TS</td>
+                                <td><span class="badge g">Available</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#2196f3,#0d47a1)">AD
+                                        </div>
+                                        <div>
+                                            <div class="nm">Dr. Anjali Desai</div>
+                                            <div class="sub">MD Internal — SH-D-0091</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Internal Medicine</td>
+                                <td>20 yrs</td>
+                                <td>521</td>
+                                <td>Delhi, DL</td>
+                                <td><span class="badge g">Available</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="name-cell">
+                                        <div class="av-xs" style="background:linear-gradient(135deg,#9c27b0,#6a1b9a)">VM
+                                        </div>
+                                        <div>
+                                            <div class="nm">Dr. Vivek Menon</div>
+                                            <div class="sub">MD Pulm — SH-D-0103</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Pulmonology</td>
+                                <td>14 yrs</td>
+                                <td>289</td>
+                                <td>Bangalore, KA</td>
+                                <td><span class="badge r">Unavailable</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SURVEILLANCE TAB -->
+        <div class="sec" id="surveillance">
+            <div class="sh"><span class="st"><span class="material-symbols-outlined">coronavirus</span> Disease
+                    Surveillance — Location Heatmap</span></div>
+            <div class="sb">
+                <div class="map-grid">
+                    <div class="map-card">
+                        <div class="map-card-hdr"><span class="material-symbols-outlined">location_on</span> Disease
+                            Hotspots by Region</div>
+                        <div class="map-card-body">
+                            <div class="hs-list">
+                                <div class="hs-item">
+                                    <div class="hs-icon" style="background:var(--rs);color:var(--r)"><span
+                                            class="material-symbols-outlined">location_on</span></div>
+                                    <div class="hs-info">
+                                        <div class="hs-name">Delhi NCR</div>
+                                        <div class="hs-sub">Dengue, COVID-19, Viral Fever</div>
+                                    </div>
+                                    <div class="hs-count">156</div>
+                                </div>
+                                <div class="hs-item">
+                                    <div class="hs-icon" style="background:var(--as);color:var(--a)"><span
+                                            class="material-symbols-outlined">location_on</span></div>
+                                    <div class="hs-info">
+                                        <div class="hs-name">Mumbai Metropolitan</div>
+                                        <div class="hs-sub">Malaria, Leptospirosis</div>
+                                    </div>
+                                    <div class="hs-count">89</div>
+                                </div>
+                                <div class="hs-item">
+                                    <div class="hs-icon" style="background:var(--as);color:var(--a)"><span
+                                            class="material-symbols-outlined">location_on</span></div>
+                                    <div class="hs-info">
+                                        <div class="hs-name">Chennai, TN</div>
+                                        <div class="hs-sub">Chikungunya, Dengue</div>
+                                    </div>
+                                    <div class="hs-count">67</div>
+                                </div>
+                                <div class="hs-item">
+                                    <div class="hs-icon" style="background:var(--bs);color:var(--b)"><span
+                                            class="material-symbols-outlined">location_on</span></div>
+                                    <div class="hs-info">
+                                        <div class="hs-name">Bangalore, KA</div>
+                                        <div class="hs-sub">Malaria, H1N1</div>
+                                    </div>
+                                    <div class="hs-count">42</div>
+                                </div>
+                                <div class="hs-item">
+                                    <div class="hs-icon" style="background:var(--gs);color:var(--g)"><span
+                                            class="material-symbols-outlined">location_on</span></div>
+                                    <div class="hs-info">
+                                        <div class="hs-name">Kochi, KL</div>
+                                        <div class="hs-sub">Viral Fever</div>
+                                    </div>
+                                    <div class="hs-count">18</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="map-card">
+                        <div class="map-card-hdr"><span class="material-symbols-outlined">bar_chart</span> Weekly
+                            Disease Trend</div>
+                        <div class="map-card-body">
+                            <div class="bar-chart" id="barChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OUTBREAKS TAB -->
+        <div class="sec" id="outbreaks">
+            <div class="sh"><span class="st"><span class="material-symbols-outlined">emergency</span> Epidemic &
+                    Outbreak Predictions</span></div>
+            <div class="sb">
+                <div class="alert-grid">
+                    <div class="alert-card">
+                        <h4>🔴 Dengue Surge — Delhi NCR</h4>
+                        <p>47% increase in dengue cases in the last 14 days. Cluster detected in South Delhi & Noida.
+                            Recommend vector control deployment.</p>
+                        <div class="alert-meta"><span class="material-symbols-outlined">schedule</span> Detected: Mar
+                            10, 2024 • Confidence: 92%</div>
+                    </div>
+                    <div class="alert-card warn">
+                        <h4>🟡 H1N1 Cluster — Bangalore</h4>
+                        <p>Unusual spike in influenza-like illness in Whitefield area. 23 confirmed H1N1 cases in 7
+                            days. Monitoring active.</p>
+                        <div class="alert-meta"><span class="material-symbols-outlined">schedule</span> Detected: Mar 8,
+                            2024 • Confidence: 78%</div>
+                    </div>
+                    <div class="alert-card info">
+                        <h4>🔵 COVID-19 Variant — Hyderabad</h4>
+                        <p>New sub-variant XBB.1.16 detected in 5 patients. Genomic sequencing confirms. No severity
+                            increase reported.</p>
+                        <div class="alert-meta"><span class="material-symbols-outlined">schedule</span> Detected: Mar
+                            11, 2024 • Confidence: 85%</div>
+                    </div>
+                    <div class="alert-card">
+                        <h4>🔴 Malaria Spike — Mumbai</h4>
+                        <p>Post-monsoon malaria cases up 62% vs last year. Hotspots: Dharavi, Andheri East. Immediate
+                            fumigation recommended.</p>
+                        <div class="alert-meta"><span class="material-symbols-outlined">schedule</span> Detected: Mar 7,
+                            2024 • Confidence: 88%</div>
+                    </div>
+                    <div class="alert-card warn">
+                        <h4>🟡 Chikungunya — Chennai</h4>
+                        <p>67 cases reported across 3 districts. Aedes mosquito breeding sites identified near water
+                            bodies.</p>
+                        <div class="alert-meta"><span class="material-symbols-outlined">schedule</span> Detected: Mar 9,
+                            2024 • Confidence: 74%</div>
+                    </div>
+                    <div class="alert-card info">
+                        <h4>🔵 Leptospirosis Watch — Gujarat</h4>
+                        <p>Seasonal uptick expected. 12 confirmed cases in Ahmedabad post-flooding. Low-level monitoring
+                            recommended.</p>
+                        <div class="alert-meta"><span class="material-symbols-outlined">schedule</span> Detected: Mar 6,
+                            2024 • Confidence: 65%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"><span class="material-symbols-outlined">check_circle</span><span
+            id="toastMsg">Done</span></div>
+    <footer class="ftr">Admin Console v2.4.0 &nbsp;© 2024 Smart Healthcare Systems. All rights reserved.</footer>
+
+    <script>
+        // Tabs
+        document.getElementById('tabs').addEventListener('click', e => {
+            const t = e.target.closest('.tab'); if (!t) return;
+            document.querySelectorAll('.tab').forEach(b => b.classList.remove('active')); t.classList.add('active');
+            document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+            document.getElementById(t.dataset.tab).classList.add('active');
+        });
+        // Search
+        function bindSearch(inputId, tableId) {
+            document.getElementById(inputId).addEventListener('input', function () {
+                const q = this.value.toLowerCase();
+                document.querySelectorAll('#' + tableId + ' tbody tr').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none' });
+            });
+        }
+        bindSearch('patSearch', 'patTable'); bindSearch('docSearch', 'docTable');
+        // Bar chart
+        const diseases = [{ l: 'Dengue', v: 156, c: 'var(--r)' }, { l: 'Malaria', v: 89, c: 'var(--a)' }, { l: 'COVID', v: 52, c: 'var(--b)' }, { l: 'H1N1', v: 42, c: 'var(--cy)' }, { l: 'Chiku.', v: 67, c: 'var(--a)' }, { l: 'Viral F.', v: 78, c: 'var(--p)' }, { l: 'Lepto.', v: 18, c: 'var(--g)' }];
+        const mx = Math.max(...diseases.map(d => d.v));
+        const bc = document.getElementById('barChart');
+        diseases.forEach(d => {
+            const col = document.createElement('div'); col.className = 'bar-col';
+            const bar = document.createElement('div'); bar.className = 'bar'; bar.style.height = (d.v / mx * 100) + '%'; bar.style.background = d.c;
+            const val = document.createElement('div'); val.className = 'bar-val'; val.textContent = d.v; val.style.color = d.c;
+            const lbl = document.createElement('div'); lbl.className = 'bar-lbl'; lbl.textContent = d.l;
+            col.append(val, bar, lbl); bc.append(col);
+        });
+        // Auth populate & logout
+        (function () {
+            const u = window.__user; if (!u) return;
+            const p = u.name.split(' '), ini = p.length >= 2 ? (p[0][0] + p[p.length - 1][0]).toUpperCase() : u.name.substring(0, 2).toUpperCase();
+            const ha = document.getElementById('hdrAv'); if (ha) { ha.textContent = ini; ha.title = u.name }
+            document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.removeItem('shSession'); window.location.href = 'auth.html' });
+        })();
+    </script>
+</body>
+
+</html>

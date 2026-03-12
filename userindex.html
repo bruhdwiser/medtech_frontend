@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Patient Dashboard | Smart Healthcare</title>
+    <meta name="description" content="Patient dashboard for Smart Healthcare — view medical history, appointments, prescriptions and digital health card." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #833cf6;
+            --primary-glow: rgba(131, 60, 246, 0.25);
+            --primary-hover: #9a5dfc;
+            --primary-soft: rgba(131, 60, 246, 0.12);
+            --bg-dark: #0d0a14;
+            --bg-card: #151020;
+            --bg-card-alt: #1a1328;
+            --bg-input: #1c1630;
+            --border: #2a2240;
+            --border-light: #352d4a;
+            --text-primary: #f1f0f5;
+            --text-secondary: #9891a8;
+            --text-muted: #6b6380;
+            --green: #22c55e;
+            --green-soft: rgba(34,197,94,0.12);
+            --amber: #f59e0b;
+            --amber-soft: rgba(245,158,11,0.12);
+            --red: #ef4444;
+            --red-soft: rgba(239,68,68,0.12);
+            --blue: #3b82f6;
+            --blue-soft: rgba(59,130,246,0.12);
+            --cyan: #06b6d4;
+            --cyan-soft: rgba(6,182,212,0.12);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 700px 500px at 15% 10%, rgba(131,60,246,0.07), transparent),
+                radial-gradient(ellipse 500px 500px at 85% 85%, rgba(90,40,200,0.05), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 2rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: rgba(13,10,20,0.85);
+            backdrop-filter: blur(16px);
+            z-index: 100;
+        }
+        .header-brand { display: flex; align-items: center; gap: 0.7rem; color: var(--primary); }
+        .header-brand svg { width: 30px; height: 30px; }
+        .header-brand h2 { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; }
+        .header-right { display: flex; align-items: center; gap: 0.75rem; }
+        .icon-btn {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .icon-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+        .icon-btn .badge {
+            position: absolute;
+            top: -3px; right: -3px;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--red);
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .avatar-sm {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), #6320c9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #fff;
+            cursor: pointer;
+            border: 2px solid var(--border);
+        }
+
+        /* ── Layout ── */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ── Profile Hero ── */
+        .profile-hero {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.75rem 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        .avatar-lg {
+            width: 80px; height: 80px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), #6320c9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.75rem;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 8px 24px var(--primary-glow);
+        }
+        .profile-info h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.2rem;
+        }
+        .profile-info .subtitle { color: var(--text-secondary); font-size: 0.875rem; }
+        .profile-meta {
+            display: flex;
+            gap: 1.25rem;
+            margin-top: 0.65rem;
+            flex-wrap: wrap;
+        }
+        .meta-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-input);
+            padding: 0.3rem 0.7rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .meta-chip .material-symbols-outlined { font-size: 15px; }
+        .meta-chip.green { color: var(--green); background: var(--green-soft); border-color: rgba(34,197,94,0.2); }
+        .profile-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 0.6rem;
+            flex-shrink: 0;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.55rem 1.1rem;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn .material-symbols-outlined { font-size: 17px; }
+        .btn-primary-filled {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+        .btn-primary-filled:hover { background: var(--primary-hover); }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ── Quick Stats ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .stat-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+        .stat-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
+        .stat-icon .material-symbols-outlined { font-size: 22px; }
+        .stat-icon.purple { background: var(--primary-soft); color: var(--primary); }
+        .stat-icon.green { background: var(--green-soft); color: var(--green); }
+        .stat-icon.amber { background: var(--amber-soft); color: var(--amber); }
+        .stat-icon.blue { background: var(--blue-soft); color: var(--blue); }
+        .stat-value { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+        /* ── Section Headers ── */
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .section-title .material-symbols-outlined { font-size: 20px; color: var(--primary); }
+        .section-body { padding: 1rem 1.5rem; }
+        .view-all {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .view-all:hover { text-decoration: underline; }
+        .view-all .material-symbols-outlined { font-size: 15px; }
+
+        /* ── Content Grid ── */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* ── Medical History ── */
+        .timeline { position: relative; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--border);
+        }
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            position: relative;
+        }
+        .timeline-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-top: 5px;
+            flex-shrink: 0;
+            z-index: 2;
+            box-shadow: 0 0 0 4px var(--bg-card);
+            position: relative;
+            left: 10px;
+        }
+        .timeline-dot.green { background: var(--green); }
+        .timeline-dot.amber { background: var(--amber); }
+        .timeline-dot.red { background: var(--red); }
+        .tl-content { padding-left: 0.5rem; }
+        .tl-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.15rem; }
+        .tl-detail { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
+        .tl-date { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+        /* ── Appointments ── */
+        .appt-list { display: flex; flex-direction: column; gap: 0.65rem; }
+        .appt-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .appt-card:hover { border-color: var(--primary); }
+        .appt-date-box {
+            width: 50px; height: 50px;
+            background: var(--primary-soft);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .appt-date-box .day { font-size: 1.15rem; font-weight: 800; color: var(--primary); line-height: 1; }
+        .appt-date-box .month { font-size: 0.6rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; }
+        .appt-info { flex: 1; min-width: 0; }
+        .appt-doctor { font-size: 0.85rem; font-weight: 600; }
+        .appt-spec { font-size: 0.72rem; color: var(--text-secondary); margin-top: 0.1rem; }
+        .appt-time { font-size: 0.7rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 0.25rem; }
+        .appt-time .material-symbols-outlined { font-size: 13px; }
+        .status-badge {
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+        }
+        .status-badge.upcoming { background: var(--blue-soft); color: var(--blue); }
+        .status-badge.confirmed { background: var(--green-soft); color: var(--green); }
+        .status-badge.pending { background: var(--amber-soft); color: var(--amber); }
+
+        /* ── Prescriptions ── */
+        .rx-list { display: flex; flex-direction: column; gap: 0.65rem; }
+        .rx-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .rx-card:hover { border-color: var(--primary); }
+        .rx-icon-box {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .rx-icon-box .material-symbols-outlined { font-size: 22px; }
+        .rx-icon-box.active { background: var(--green-soft); color: var(--green); }
+        .rx-icon-box.completed { background: var(--blue-soft); color: var(--blue); }
+        .rx-icon-box.refill { background: var(--amber-soft); color: var(--amber); }
+        .rx-info { flex: 1; min-width: 0; }
+        .rx-name { font-size: 0.85rem; font-weight: 600; }
+        .rx-dosage { font-size: 0.72rem; color: var(--text-secondary); margin-top: 0.1rem; }
+        .rx-prescribed { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+        /* ── Prescription Scanner ── */
+        .scanner-zone {
+            border: 2px dashed var(--border-light);
+            border-radius: 14px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            background: var(--bg-input);
+        }
+        .scanner-zone:hover, .scanner-zone.dragover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+        .scanner-zone.dragover {
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+        .scanner-zone .drop-icon {
+            font-size: 44px;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+        .scanner-zone .drop-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .scanner-zone .drop-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .scanner-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .scanner-actions {
+            display: flex;
+            gap: 0.65rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn-scan {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-scan:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+        .btn-scan .material-symbols-outlined { font-size: 17px; }
+        .btn-scan.primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+        .btn-scan.primary:hover { background: var(--primary-hover); }
+
+        /* Preview Area */
+        .scan-preview {
+            display: none;
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-card-alt);
+        }
+        .scan-preview.visible { display: block; animation: fadeSlideIn 0.35s ease; }
+        .preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .preview-header span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .preview-header span .material-symbols-outlined { font-size: 17px; color: var(--primary); }
+        .preview-remove {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .preview-remove:hover { color: var(--red); background: var(--red-soft); }
+        .preview-body {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .preview-img-wrap {
+            width: 140px;
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--bg-input);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+        .preview-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .preview-img-wrap .material-symbols-outlined {
+            font-size: 40px;
+            color: var(--text-muted);
+        }
+
+        /* Extracted Text */
+        .extracted-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .extracted-text h4 {
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .extracted-text h4 .material-symbols-outlined { font-size: 15px; color: var(--green); }
+        .extracted-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .ext-field {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .ext-field label {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .ext-field input {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 0.4rem 0.65rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.78rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .ext-field input:focus { border-color: var(--primary); }
+        .ext-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        /* Processing spinner */
+        .processing-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(13,10,20,0.85);
+            border-radius: 14px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            z-index: 10;
+        }
+        .processing-overlay.visible { display: flex; }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .processing-overlay p {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Scanned list */
+        .scanned-list {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .scanned-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            animation: fadeSlideIn 0.3s ease;
+        }
+        .scanned-item .si-icon {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            background: var(--green-soft);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .scanned-item .si-icon .material-symbols-outlined { font-size: 18px; }
+        .scanned-item .si-info { flex: 1; }
+        .scanned-item .si-name { font-size: 0.8rem; font-weight: 600; }
+        .scanned-item .si-detail { font-size: 0.68rem; color: var(--text-secondary); }
+        .scanned-item .si-remove {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .scanned-item .si-remove:hover { color: var(--red); background: var(--red-soft); }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--green);
+            color: #fff;
+            padding: 0.7rem 1.4rem;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            z-index: 200;
+            pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast .material-symbols-outlined { font-size: 19px; }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .content-grid { grid-template-columns: 1fr; }
+            .profile-hero { flex-direction: column; text-align: center; align-items: center; }
+            .profile-meta { justify-content: center; }
+            .profile-actions { margin-left: 0; margin-top: 0.75rem; }
+        }
+        @media (max-width: 540px) {
+            .header { padding: 0.75rem 1rem; }
+            .page-container { padding: 1rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Auth Guard -->
+    <script>
+    (function(){
+        try {
+            const s = JSON.parse(localStorage.getItem('shSession'));
+            if (!s || !s.loggedIn) { window.location.href = 'auth.html'; return; }
+            window.__user = s;
+        } catch { window.location.href = 'auth.html'; }
+    })();
+    </script>
+
+    <!-- ═══════════ HEADER ═══════════ -->
+    <header class="header">
+        <a href="userindex.html" class="header-brand">
+            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#c0)"><path clip-rule="evenodd" d="M24 .757 47.243 24 24 47.243.757 24 24 .757ZM21 35.757V12.243L9.243 24 21 35.757Z" fill="currentColor" fill-rule="evenodd"/></g>
+                <defs><clipPath id="c0"><rect fill="#fff" height="48" width="48"/></clipPath></defs>
+            </svg>
+            <h2>Smart Healthcare</h2>
+        </a>
+        <div class="header-right">
+            <button class="icon-btn" title="Notifications">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="badge">3</span>
+            </button>
+            <button class="icon-btn" title="Messages">
+                <span class="material-symbols-outlined">chat_bubble</span>
+            </button>
+            <div class="avatar-sm" id="headerAvatar" title="User"></div>
+            <button class="icon-btn" title="Logout" id="logoutBtn" style="color:var(--red);">
+                <span class="material-symbols-outlined">logout</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="page-container">
+
+        <!-- ═══════════ PROFILE HERO ═══════════ -->
+        <section class="profile-hero">
+            <div class="avatar-lg">AM</div>
+            <div class="profile-info">
+                <h1>Arjun Mehta</h1>
+                <p class="subtitle">Patient ID: SH-2024-07821 &nbsp;•&nbsp; arjun.mehta@email.com</p>
+                <div class="profile-meta">
+                    <span class="meta-chip"><span class="material-symbols-outlined">cake</span> 28 yrs</span>
+                    <span class="meta-chip"><span class="material-symbols-outlined">bloodtype</span> B+</span>
+                    <span class="meta-chip"><span class="material-symbols-outlined">male</span> Male</span>
+                    <span class="meta-chip green"><span class="material-symbols-outlined">verified_user</span> Active</span>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <a href="healthcard.html" class="btn btn-primary-filled">
+                    <span class="material-symbols-outlined">badge</span> Health Card
+                </a>
+                <button class="btn btn-outline">
+                    <span class="material-symbols-outlined">edit</span> Edit
+                </button>
+            </div>
+        </section>
+
+        <!-- ═══════════ QUICK STATS ═══════════ -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon purple"><span class="material-symbols-outlined">calendar_month</span></div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Total Appointments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><span class="material-symbols-outlined">medication</span></div>
+                <div class="stat-value">5</div>
+                <div class="stat-label">Active Prescriptions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon amber"><span class="material-symbols-outlined">lab_profile</span></div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">Lab Reports</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><span class="material-symbols-outlined">monitor_heart</span></div>
+                <div class="stat-value">3</div>
+                <div class="stat-label">Ongoing Treatments</div>
+            </div>
+        </div>
+
+        <!-- ═══════════ MAIN CONTENT GRID ═══════════ -->
+        <div class="content-grid">
+
+            <!-- ────── LEFT: Medical History ────── -->
+            <div>
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-title"><span class="material-symbols-outlined">history</span> Medical History</span>
+                        <span class="view-all">View All <span class="material-symbols-outlined">chevron_right</span></span>
+                    </div>
+                    <div class="section-body">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="tl-content">
+                                    <div class="tl-title">General Checkup</div>
+                                    <div class="tl-detail">Complete blood count, thyroid panel. All vitals normal. BMI: 23.4</div>
+                                    <div class="tl-date">Feb 28, 2024 — Dr. Priya Sharma</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot amber"></div>
+                                <div class="tl-content">
+                                    <div class="tl-title">Orthopedic Consultation</div>
+                                    <div class="tl-detail">X-ray — mild cervical spondylosis. Physiotherapy recommended 3×/week.</div>
+                                    <div class="tl-date">Jan 15, 2024 — Dr. Raghav Iyer</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot green"></div>
+                                <div class="tl-content">
+                                    <div class="tl-title">Dental Cleaning</div>
+                                    <div class="tl-detail">Routine scaling and polishing. No cavities detected.</div>
+                                    <div class="tl-date">Dec 10, 2023 — Dr. Kavitha Nair</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot red"></div>
+                                <div class="tl-content">
+                                    <div class="tl-title">Allergic Reaction — ER Visit</div>
+                                    <div class="tl-detail">Shellfish allergy. Treated with epinephrine. Observation 6 hrs.</div>
+                                    <div class="tl-date">Sep 05, 2023 — City General Hospital</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="tl-content">
+                                    <div class="tl-title">Annual Eye Exam</div>
+                                    <div class="tl-detail">Vision 20/20 both eyes. No retinal abnormalities.</div>
+                                    <div class="tl-date">Jul 22, 2023 — Dr. Sunita Rao</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ────── Prescriptions ────── -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-title"><span class="material-symbols-outlined">prescriptions</span> Prescriptions</span>
+                        <span class="view-all">View All <span class="material-symbols-outlined">chevron_right</span></span>
+                    </div>
+                    <div class="section-body">
+                        <div class="rx-list">
+                            <div class="rx-card">
+                                <div class="rx-icon-box active"><span class="material-symbols-outlined">medication</span></div>
+                                <div class="rx-info">
+                                    <div class="rx-name">Amoxicillin 500mg</div>
+                                    <div class="rx-dosage">1 capsule × 3 times/day — after meals</div>
+                                    <div class="rx-prescribed">Prescribed: Feb 28, 2024 • Dr. Priya Sharma</div>
+                                </div>
+                                <span class="status-badge confirmed">Active</span>
+                            </div>
+                            <div class="rx-card">
+                                <div class="rx-icon-box active"><span class="material-symbols-outlined">medication_liquid</span></div>
+                                <div class="rx-info">
+                                    <div class="rx-name">Cetirizine 10mg</div>
+                                    <div class="rx-dosage">1 tablet daily — before bed</div>
+                                    <div class="rx-prescribed">Prescribed: Feb 28, 2024 • Dr. Priya Sharma</div>
+                                </div>
+                                <span class="status-badge confirmed">Active</span>
+                            </div>
+                            <div class="rx-card">
+                                <div class="rx-icon-box refill"><span class="material-symbols-outlined">pill</span></div>
+                                <div class="rx-info">
+                                    <div class="rx-name">Calcium + Vitamin D3</div>
+                                    <div class="rx-dosage">1 tablet daily — morning</div>
+                                    <div class="rx-prescribed">Prescribed: Jan 15, 2024 • Dr. Raghav Iyer</div>
+                                </div>
+                                <span class="status-badge pending">Refill</span>
+                            </div>
+                            <div class="rx-card">
+                                <div class="rx-icon-box completed"><span class="material-symbols-outlined">vaccines</span></div>
+                                <div class="rx-info">
+                                    <div class="rx-name">Ibuprofen 400mg</div>
+                                    <div class="rx-dosage">1 tablet as needed — max 3/day</div>
+                                    <div class="rx-prescribed">Prescribed: Sep 05, 2023 • ER Physician</div>
+                                </div>
+                                <span class="status-badge upcoming">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ────── Prescription Scanner ────── -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-title"><span class="material-symbols-outlined">document_scanner</span> Scan Prescription</span>
+                        <span class="view-all" onclick="resetScanner()">Reset <span class="material-symbols-outlined">refresh</span></span>
+                    </div>
+                    <div class="section-body">
+                        <!-- Drop Zone -->
+                        <div class="scanner-zone" id="scannerZone">
+                            <div class="processing-overlay" id="processingOverlay">
+                                <div class="spinner"></div>
+                                <p>Scanning prescription…</p>
+                            </div>
+                            <span class="material-symbols-outlined drop-icon">document_scanner</span>
+                            <div class="drop-title">Drop prescription image here</div>
+                            <div class="drop-hint">or click to browse — supports JPG, PNG, PDF</div>
+                            <input type="file" id="rxFileInput" accept="image/*,.pdf" />
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="scanner-actions">
+                            <button class="btn-scan" id="cameraBtn">
+                                <span class="material-symbols-outlined">photo_camera</span> Use Camera
+                            </button>
+                            <button class="btn-scan" onclick="document.getElementById('rxFileInput').click()">
+                                <span class="material-symbols-outlined">upload_file</span> Browse Files
+                            </button>
+                        </div>
+
+                        <!-- Camera capture (hidden by default) -->
+                        <div id="cameraContainer" style="display:none; margin-top:1rem;">
+                            <video id="cameraFeed" autoplay playsinline style="width:100%; border-radius:12px; border:1px solid var(--border);"></video>
+                            <div class="scanner-actions" style="margin-top:0.65rem;">
+                                <button class="btn-scan primary" id="captureBtn">
+                                    <span class="material-symbols-outlined">camera</span> Capture
+                                </button>
+                                <button class="btn-scan" id="closeCamBtn">
+                                    <span class="material-symbols-outlined">close</span> Cancel
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="captureCanvas" style="display:none;"></canvas>
+
+                        <!-- Preview -->
+                        <div class="scan-preview" id="scanPreview">
+                            <div class="preview-header">
+                                <span><span class="material-symbols-outlined">image</span> Scanned Image</span>
+                                <button class="preview-remove" onclick="resetScanner()" title="Remove">
+                                    <span class="material-symbols-outlined">close</span>
+                                </button>
+                            </div>
+                            <div class="preview-body">
+                                <div class="preview-img-wrap">
+                                    <img id="previewImg" src="" alt="Prescription preview" />
+                                </div>
+                                <div class="extracted-text">
+                                    <h4><span class="material-symbols-outlined">check_circle</span> Extracted Details</h4>
+                                    <div class="extracted-fields">
+                                        <div class="ext-field">
+                                            <label for="extMed">Medication Name</label>
+                                            <input type="text" id="extMed" value="" placeholder="e.g. Amoxicillin 500mg" />
+                                        </div>
+                                        <div class="ext-row">
+                                            <div class="ext-field">
+                                                <label for="extDosage">Dosage</label>
+                                                <input type="text" id="extDosage" value="" placeholder="e.g. 1 tablet × 3/day" />
+                                            </div>
+                                            <div class="ext-field">
+                                                <label for="extDoctor">Prescribed By</label>
+                                                <input type="text" id="extDoctor" value="" placeholder="e.g. Dr. Sharma" />
+                                            </div>
+                                        </div>
+                                        <div class="ext-row">
+                                            <div class="ext-field">
+                                                <label for="extDate">Date</label>
+                                                <input type="date" id="extDate" />
+                                            </div>
+                                            <div class="ext-field">
+                                                <label for="extNotes">Notes</label>
+                                                <input type="text" id="extNotes" placeholder="After meals" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="scanner-actions">
+                                        <button class="btn-scan primary" id="addRxBtn">
+                                            <span class="material-symbols-outlined">add_circle</span> Add to Prescriptions
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scanned Items List -->
+                        <div class="scanned-list" id="scannedList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ────── RIGHT: Appointments ────── -->
+            <div>
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-title"><span class="material-symbols-outlined">event_note</span> Upcoming Appointments</span>
+                        <span class="view-all">Book New <span class="material-symbols-outlined">add_circle</span></span>
+                    </div>
+                    <div class="section-body">
+                        <div class="appt-list">
+                            <div class="appt-card">
+                                <div class="appt-date-box">
+                                    <span class="day">15</span>
+                                    <span class="month">Mar</span>
+                                </div>
+                                <div class="appt-info">
+                                    <div class="appt-doctor">Dr. Priya Sharma</div>
+                                    <div class="appt-spec">General Physician • Follow-up</div>
+                                    <div class="appt-time"><span class="material-symbols-outlined">schedule</span> 10:30 AM — Room 204</div>
+                                </div>
+                                <span class="status-badge confirmed">Confirmed</span>
+                            </div>
+                            <div class="appt-card">
+                                <div class="appt-date-box">
+                                    <span class="day">22</span>
+                                    <span class="month">Mar</span>
+                                </div>
+                                <div class="appt-info">
+                                    <div class="appt-doctor">Dr. Raghav Iyer</div>
+                                    <div class="appt-spec">Orthopedics • Physiotherapy Review</div>
+                                    <div class="appt-time"><span class="material-symbols-outlined">schedule</span> 2:00 PM — Room 312</div>
+                                </div>
+                                <span class="status-badge upcoming">Upcoming</span>
+                            </div>
+                            <div class="appt-card">
+                                <div class="appt-date-box">
+                                    <span class="day">05</span>
+                                    <span class="month">Apr</span>
+                                </div>
+                                <div class="appt-info">
+                                    <div class="appt-doctor">Dr. Sunita Rao</div>
+                                    <div class="appt-spec">Ophthalmology • Annual Checkup</div>
+                                    <div class="appt-time"><span class="material-symbols-outlined">schedule</span> 11:00 AM — Room 108</div>
+                                </div>
+                                <span class="status-badge pending">Pending</span>
+                            </div>
+                            <div class="appt-card">
+                                <div class="appt-date-box">
+                                    <span class="day">18</span>
+                                    <span class="month">Apr</span>
+                                </div>
+                                <div class="appt-info">
+                                    <div class="appt-doctor">Dr. Kavitha Nair</div>
+                                    <div class="appt-spec">Dentistry • 6-Month Cleaning</div>
+                                    <div class="appt-time"><span class="material-symbols-outlined">schedule</span> 9:00 AM — Dental Wing</div>
+                                </div>
+                                <span class="status-badge upcoming">Upcoming</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ────── Past Appointments ────── -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-title"><span class="material-symbols-outlined">event_available</span> Past Appointments</span>
+                        <span class="view-all">View All <span class="material-symbols-outlined">chevron_right</span></span>
+                    </div>
+                    <div class="section-body">
+                        <div class="appt-list">
+                            <div class="appt-card" style="opacity:0.7;">
+                                <div class="appt-date-box" style="background:var(--bg-card-alt);">
+                                    <span class="day" style="color:var(--text-muted);">28</span>
+                                    <span class="month" style="color:var(--text-muted);">Feb</span>
+                                </div>
+                                <div class="appt-info">
+                                    <div class="appt-doctor">Dr. Priya Sharma</div>
+                                    <div class="appt-spec">General Physician • Checkup</div>
+                                    <div class="appt-time"><span class="material-symbols-outlined">schedule</span> 10:00 AM — Completed</div>
+                                </div>
+                                <span class="status-badge confirmed">Done</span>
+                            </div>
+                            <div class="appt-card" style="opacity:0.7;">
+                                <div class="appt-date-box" style="background:var(--bg-card-alt);">
+                                    <span class="day" style="color:var(--text-muted);">15</span>
+                                    <span class="month" style="color:var(--text-muted);">Jan</span>
+                                </div>
+                                <div class="appt-info">
+                                    <div class="appt-doctor">Dr. Raghav Iyer</div>
+                                    <div class="appt-spec">Orthopedics • Initial Consult</div>
+                                    <div class="appt-time"><span class="material-symbols-outlined">schedule</span> 3:30 PM — Completed</div>
+                                </div>
+                                <span class="status-badge confirmed">Done</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span id="toastMsg">Prescription added!</span>
+    </div>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer class="footer">
+        System Version 2.4.0 &nbsp;© 2024 Smart Healthcare Systems. All rights reserved.
+    </footer>
+
+    <script>
+    (function() {
+        const zone = document.getElementById('scannerZone');
+        const fileInput = document.getElementById('rxFileInput');
+        const preview = document.getElementById('scanPreview');
+        const previewImg = document.getElementById('previewImg');
+        const overlay = document.getElementById('processingOverlay');
+        const scannedList = document.getElementById('scannedList');
+        const cameraBtn = document.getElementById('cameraBtn');
+        const camContainer = document.getElementById('cameraContainer');
+        const cameraFeed = document.getElementById('cameraFeed');
+        const captureBtn = document.getElementById('captureBtn');
+        const closeCamBtn = document.getElementById('closeCamBtn');
+        const captureCanvas = document.getElementById('captureCanvas');
+        let camStream = null;
+
+        // ── Demo prescription data (simulates OCR) ── 
+        const demoRx = [
+            { med: 'Metformin 500mg', dosage: '1 tablet × 2/day', doctor: 'Dr. Anjali Desai', notes: 'After meals' },
+            { med: 'Atorvastatin 20mg', dosage: '1 tablet at night', doctor: 'Dr. Priya Sharma', notes: 'Before bed' },
+            { med: 'Pantoprazole 40mg', dosage: '1 tablet daily', doctor: 'Dr. Raghav Iyer', notes: 'Empty stomach' },
+            { med: 'Azithromycin 250mg', dosage: '1 tablet × 2/day', doctor: 'Dr. Kavitha Nair', notes: '5-day course' },
+        ];
+
+        function getTodayStr() {
+            const d = new Date();
+            return d.toISOString().slice(0, 10);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        // ── Drag & Drop ──
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) processFile(file);
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files[0]) processFile(fileInput.files[0]);
+        });
+
+        // ── Camera ──
+        cameraBtn.addEventListener('click', async () => {
+            try {
+                camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                cameraFeed.srcObject = camStream;
+                camContainer.style.display = 'block';
+            } catch {
+                showToast('Camera access denied');
+            }
+        });
+
+        captureBtn.addEventListener('click', () => {
+            captureCanvas.width = cameraFeed.videoWidth;
+            captureCanvas.height = cameraFeed.videoHeight;
+            captureCanvas.getContext('2d').drawImage(cameraFeed, 0, 0);
+            stopCamera();
+            const dataUrl = captureCanvas.toDataURL('image/png');
+            processDataUrl(dataUrl);
+        });
+
+        closeCamBtn.addEventListener('click', stopCamera);
+
+        function stopCamera() {
+            if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+            cameraFeed.srcObject = null;
+            camContainer.style.display = 'none';
+        }
+
+        // ── Process File ──
+        function processFile(file) {
+            if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+                showToast('Please upload an image or PDF');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => processDataUrl(e.target.result);
+            reader.readAsDataURL(file);
+        }
+
+        function processDataUrl(dataUrl) {
+            previewImg.src = dataUrl;
+            overlay.classList.add('visible');
+
+            // Simulate OCR processing delay
+            setTimeout(() => {
+                overlay.classList.remove('visible');
+                preview.classList.add('visible');
+
+                // Fill with random demo data
+                const rx = demoRx[Math.floor(Math.random() * demoRx.length)];
+                document.getElementById('extMed').value = rx.med;
+                document.getElementById('extDosage').value = rx.dosage;
+                document.getElementById('extDoctor').value = rx.doctor;
+                document.getElementById('extDate').value = getTodayStr();
+                document.getElementById('extNotes').value = rx.notes;
+            }, 1800);
+        }
+
+        // ── Add to Prescriptions ──
+        document.getElementById('addRxBtn').addEventListener('click', () => {
+            const med = document.getElementById('extMed').value.trim();
+            const dosage = document.getElementById('extDosage').value.trim();
+            const doctor = document.getElementById('extDoctor').value.trim();
+            const date = document.getElementById('extDate').value;
+            const notes = document.getElementById('extNotes').value.trim();
+
+            if (!med) { showToast('Please enter a medication name'); return; }
+
+            const dateStr = date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Today';
+
+            const item = document.createElement('div');
+            item.className = 'scanned-item';
+            item.innerHTML = `
+                <div class="si-icon"><span class="material-symbols-outlined">medication</span></div>
+                <div class="si-info">
+                    <div class="si-name">${med}</div>
+                    <div class="si-detail">${dosage}${notes ? ' • ' + notes : ''} — ${doctor} (${dateStr})</div>
+                </div>
+                <button class="si-remove" onclick="this.parentElement.remove()" title="Remove">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            `;
+            scannedList.prepend(item);
+
+            // Also add to the main prescriptions section
+            const rxList = document.querySelector('.rx-list');
+            if (rxList) {
+                const rxCard = document.createElement('div');
+                rxCard.className = 'rx-card';
+                rxCard.style.animation = 'fadeSlideIn 0.35s ease';
+                rxCard.innerHTML = `
+                    <div class="rx-icon-box active"><span class="material-symbols-outlined">medication</span></div>
+                    <div class="rx-info">
+                        <div class="rx-name">${med}</div>
+                        <div class="rx-dosage">${dosage}${notes ? ' — ' + notes : ''}</div>
+                        <div class="rx-prescribed">Scanned: ${dateStr} • ${doctor}</div>
+                    </div>
+                    <span class="status-badge confirmed">Active</span>
+                `;
+                rxList.prepend(rxCard);
+            }
+
+            showToast('Prescription added successfully!');
+            resetScanner();
+        });
+
+        // ── Reset ──
+        window.resetScanner = function() {
+            preview.classList.remove('visible');
+            overlay.classList.remove('visible');
+            fileInput.value = '';
+            previewImg.src = '';
+            document.getElementById('extMed').value = '';
+            document.getElementById('extDosage').value = '';
+            document.getElementById('extDoctor').value = '';
+            document.getElementById('extDate').value = '';
+            document.getElementById('extNotes').value = '';
+            stopCamera();
+        };
+    })();
+    </script>
+
+    <!-- Auth: populate user data & logout -->
+    <script>
+    (function(){
+        const u = window.__user;
+        if (!u) return;
+
+        // Initials
+        const parts = u.name.split(' ');
+        const initials = parts.length >= 2
+            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+            : u.name.substring(0, 2).toUpperCase();
+
+        // Header avatar
+        const ha = document.getElementById('headerAvatar');
+        if (ha) { ha.textContent = initials; ha.title = u.name; }
+
+        // Profile hero
+        const heroAvatar = document.querySelector('.avatar-lg');
+        if (heroAvatar) heroAvatar.textContent = initials;
+
+        const heroName = document.querySelector('.profile-info h1');
+        if (heroName) heroName.textContent = u.name;
+
+        const heroSub = document.querySelector('.profile-info .subtitle');
+        if (heroSub) heroSub.textContent = `Role: ${u.role} • ${u.email}`;
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('shSession');
+            window.location.href = 'auth.html';
+        });
+    })();
+    </script>
+
+</body>
+</html>

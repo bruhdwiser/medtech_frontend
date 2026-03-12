@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Digital Health Card | Smart Healthcare</title>
+    <meta name="description" content="Generate and download your digital health card with a secure QR code for quick identification." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet" />
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <!-- html2canvas for card download -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #833cf6;
+            --primary-glow: rgba(131, 60, 246, 0.25);
+            --primary-hover: #9a5dfc;
+            --primary-soft: rgba(131, 60, 246, 0.12);
+            --bg-dark: #0d0a14;
+            --bg-card: #151020;
+            --bg-input: #1c1630;
+            --border: #2a2240;
+            --border-light: #352d4a;
+            --text-primary: #f1f0f5;
+            --text-secondary: #9891a8;
+            --text-muted: #6b6380;
+            --green: #22c55e;
+            --green-soft: rgba(34,197,94,0.12);
+            --amber: #f59e0b;
+            --blue: #3b82f6;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 700px 500px at 20% 15%, rgba(131,60,246,0.07), transparent),
+                radial-gradient(ellipse 500px 500px at 80% 80%, rgba(90,40,200,0.05), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 2rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: rgba(13,10,20,0.85);
+            backdrop-filter: blur(16px);
+            z-index: 100;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .back-btn {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+        .header-brand { display: flex; align-items: center; gap: 0.7rem; color: var(--primary); }
+        .header-brand svg { width: 30px; height: 30px; }
+        .header-brand h2 { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; }
+
+        /* ── Page ── */
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+            position: relative;
+            z-index: 5;
+        }
+        .page-title {
+            text-align: center;
+            margin-bottom: 0.4rem;
+            font-size: 1.75rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+        }
+        .page-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ── Health Card ── */
+        .card-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .health-card {
+            width: 480px;
+            max-width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(145deg, #1e1640, #120e22);
+            border: 1px solid var(--border-light);
+            box-shadow:
+                0 0 80px rgba(131,60,246,0.1),
+                0 30px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* Top gradient bar */
+        .card-top-bar {
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), #a855f7, #6320c9);
+        }
+
+        .card-body {
+            padding: 1.75rem 1.75rem 1.5rem;
+        }
+
+        /* Card Header */
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        .card-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+        .card-brand svg { width: 24px; height: 24px; color: var(--primary); }
+        .card-brand span {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+        .card-type-badge {
+            background: var(--primary-soft);
+            color: var(--primary);
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* Patient Section */
+        .card-patient {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-avatar {
+            width: 68px; height: 68px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), #6320c9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.4rem;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+        .card-patient-info h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.15rem;
+        }
+        .card-patient-id {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+        .card-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .card-tag {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .card-tag .material-symbols-outlined { font-size: 12px; }
+
+        /* Details Grid */
+        .card-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .detail-item { min-width: 0; }
+        .detail-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.15rem;
+        }
+        .detail-value {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* QR Section */
+        .card-qr-section {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+        .qr-box {
+            width: 90px; height: 90px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-box canvas, .qr-box img { width: 100% !important; height: 100% !important; border-radius: 4px; }
+        .qr-info {
+            flex: 1;
+        }
+        .qr-info .qr-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .qr-info .qr-desc {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .qr-validity {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 0.4rem;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--green);
+        }
+        .qr-validity .material-symbols-outlined { font-size: 13px; }
+
+        /* Card Footer */
+        .card-footer {
+            background: rgba(131,60,246,0.06);
+            padding: 0.65rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-footer-txt {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .hipaa-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.58rem;
+            color: var(--green);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .hipaa-badge .material-symbols-outlined { font-size: 13px; }
+
+        /* ── Action Buttons ── */
+        .card-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.7rem 1.5rem;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn .material-symbols-outlined { font-size: 19px; }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 6px 24px var(--primary-glow);
+        }
+        .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 8px 30px rgba(131,60,246,0.35); }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ── Emergency Info ── */
+        .emergency-section {
+            margin-top: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+        }
+        .emergency-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ef4444;
+        }
+        .emergency-title .material-symbols-outlined { font-size: 20px; }
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .emg-item { min-width: 0; }
+        .emg-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .emg-value { font-size: 0.85rem; font-weight: 600; }
+        .emg-value.danger { color: #ef4444; }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--green);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            z-index: 200;
+            pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast .material-symbols-outlined { font-size: 20px; }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 540px) {
+            .header { padding: 0.75rem 1rem; }
+            .page { padding: 1.5rem 1rem 3rem; }
+            .health-card { border-radius: 16px; }
+            .card-body { padding: 1.25rem; }
+            .card-details { gap: 0.6rem; }
+            .emergency-grid { grid-template-columns: 1fr; }
+            .card-actions { flex-direction: column; }
+            .btn { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Auth Guard -->
+    <script>
+    (function(){
+        try {
+            const s = JSON.parse(localStorage.getItem('shSession'));
+            if (!s || !s.loggedIn) { window.location.href = 'auth.html'; return; }
+            window.__user = s;
+        } catch { window.location.href = 'auth.html'; }
+    })();
+    </script>
+
+    <!-- ═══════════ HEADER ═══════════ -->
+    <header class="header">
+        <div class="header-left">
+            <a href="userindex.html" class="back-btn" title="Back to Dashboard">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </a>
+            <a href="userindex.html" class="header-brand">
+                <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#c1)"><path clip-rule="evenodd" d="M24 .757 47.243 24 24 47.243.757 24 24 .757ZM21 35.757V12.243L9.243 24 21 35.757Z" fill="currentColor" fill-rule="evenodd"/></g>
+                    <defs><clipPath id="c1"><rect fill="#fff" height="48" width="48"/></clipPath></defs>
+                </svg>
+                <h2>Smart Healthcare</h2>
+            </a>
+        </div>
+        <button class="back-btn" title="Logout" id="logoutBtn" style="color:#ef4444;">
+            <span class="material-symbols-outlined">logout</span>
+        </button>
+    </header>
+
+    <div class="page">
+        <h1 class="page-title">Digital Health Card</h1>
+        <p class="page-subtitle">Your portable medical identity — scan the QR code at any partner facility for instant profile access.</p>
+
+        <div class="card-wrapper">
+
+            <!-- ═══════════ THE CARD ═══════════ -->
+            <div class="health-card" id="healthCard">
+                <div class="card-top-bar"></div>
+                <div class="card-body">
+                    <!-- Header -->
+                    <div class="card-header">
+                        <div class="card-brand">
+                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#c2)"><path clip-rule="evenodd" d="M24 .757 47.243 24 24 47.243.757 24 24 .757ZM21 35.757V12.243L9.243 24 21 35.757Z" fill="currentColor" fill-rule="evenodd"/></g>
+                                <defs><clipPath id="c2"><rect fill="#fff" height="48" width="48"/></clipPath></defs>
+                            </svg>
+                            <span>Smart Healthcare</span>
+                        </div>
+                        <span class="card-type-badge">Patient Card</span>
+                    </div>
+
+                    <!-- Patient -->
+                    <div class="card-patient">
+                        <div class="card-avatar">AM</div>
+                        <div class="card-patient-info">
+                            <h3>Arjun Mehta</h3>
+                            <div class="card-patient-id">ID: SH-2024-07821</div>
+                            <div class="card-tags">
+                                <span class="card-tag"><span class="material-symbols-outlined">bloodtype</span> B+</span>
+                                <span class="card-tag"><span class="material-symbols-outlined">male</span> Male</span>
+                                <span class="card-tag"><span class="material-symbols-outlined">cake</span> 28 yrs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Date of Birth</div>
+                            <div class="detail-value">15 Jun, 1996</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">+91 98765 43210</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Primary Doctor</div>
+                            <div class="detail-value">Dr. Priya Sharma</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Insurance ID</div>
+                            <div class="detail-value">INS-4420-8812</div>
+                        </div>
+                    </div>
+
+                    <!-- QR Code -->
+                    <div class="card-qr-section">
+                        <div class="qr-box" id="qrCode"></div>
+                        <div class="qr-info">
+                            <div class="qr-title">Quick Access QR</div>
+                            <div class="qr-desc">Scan at any Smart Healthcare facility to instantly retrieve your medical records, prescriptions, and appointment history.</div>
+                            <div class="qr-validity">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                Valid until: Dec 31, 2025
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Footer -->
+                <div class="card-footer">
+                    <span class="card-footer-txt">Emergency # +91 112 0000</span>
+                    <span class="hipaa-badge">
+                        <span class="material-symbols-outlined">verified_user</span>
+                        HIPAA Compliant
+                    </span>
+                </div>
+            </div>
+
+            <!-- ═══════════ ACTION BUTTONS ═══════════ -->
+            <div class="card-actions">
+                <button class="btn btn-primary" id="downloadBtn">
+                    <span class="material-symbols-outlined">download</span>
+                    Download Card
+                </button>
+                <a href="userindex.html" class="btn btn-outline">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- ═══════════ EMERGENCY INFO ═══════════ -->
+        <div class="emergency-section">
+            <div class="emergency-title">
+                <span class="material-symbols-outlined">emergency</span>
+                Emergency Information
+            </div>
+            <div class="emergency-grid">
+                <div class="emg-item">
+                    <div class="emg-label">Blood Group</div>
+                    <div class="emg-value">B+ (Positive)</div>
+                </div>
+                <div class="emg-item">
+                    <div class="emg-label">Known Allergies</div>
+                    <div class="emg-value danger">Shellfish, Penicillin</div>
+                </div>
+                <div class="emg-item">
+                    <div class="emg-label">Emergency Contact</div>
+                    <div class="emg-value">Meera Mehta — +91 98765 12345</div>
+                </div>
+                <div class="emg-item">
+                    <div class="emg-label">Chronic Conditions</div>
+                    <div class="emg-value">Mild Cervical Spondylosis</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span id="toastMsg">Card downloaded successfully!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        System Version 2.4.0 &nbsp;© 2024 Smart Healthcare Systems. All rights reserved.
+    </footer>
+
+    <script>
+        // ── Generate QR Code ──
+        const patientData = {
+            id: 'SH-2024-07821',
+            name: 'Arjun Mehta',
+            dob: '1996-06-15',
+            blood: 'B+',
+            phone: '+919876543210',
+            allergies: 'Shellfish, Penicillin',
+            insurance: 'INS-4420-8812',
+            facility: 'Smart Healthcare Systems'
+        };
+
+        const qrText = JSON.stringify(patientData);
+
+        new QRCode(document.getElementById('qrCode'), {
+            text: qrText,
+            width: 78,
+            height: 78,
+            colorDark: '#1a1328',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // ── Toast Notification ──
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        // ── Download Card as PNG ──
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const card = document.getElementById('healthCard');
+            html2canvas(card, {
+                scale: 3,
+                backgroundColor: '#0d0a14',
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'SmartHealthcare_HealthCard_ArjunMehta.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('Card downloaded successfully!');
+            }).catch(() => {
+                showToast('Download failed — please try again.');
+            });
+        });
+    </script>
+
+    <!-- Auth: populate user data & logout -->
+    <script>
+    (function(){
+        const u = window.__user;
+        if (!u) return;
+
+        // Initials
+        const parts = u.name.split(' ');
+        const initials = parts.length >= 2
+            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+            : u.name.substring(0, 2).toUpperCase();
+
+        // Update card with user info
+        const cardName = document.querySelector('.card-patient-info h3');
+        if (cardName) cardName.textContent = u.name;
+
+        const cardAvatar = document.querySelector('.card-avatar');
+        if (cardAvatar) cardAvatar.textContent = initials;
+
+        // Update download filename
+        const dlBtn = document.getElementById('downloadBtn');
+        if (dlBtn) {
+            dlBtn._userName = u.name.replace(/\s+/g, '_');
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('shSession');
+            window.location.href = 'auth.html';
+        });
+    })();
+    </script>
+
+</body>
+</html>

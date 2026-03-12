@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Login / Sign Up | Smart Healthcare</title>
+    <meta name="description" content="Secure authentication portal for Smart Healthcare — Disease Surveillance & Healthcare Management System. HIPAA Compliant." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #833cf6;
+            --primary-glow: rgba(131, 60, 246, 0.25);
+            --primary-hover: #9a5dfc;
+            --bg-dark: #0d0a14;
+            --bg-card: #151020;
+            --bg-input: #1c1630;
+            --border: #2a2240;
+            --text-primary: #f1f0f5;
+            --text-secondary: #9891a8;
+            --text-muted: #6b6380;
+            --danger: #f44;
+            --success: #0f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ── Animated Background ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 600px 400px at 20% 20%, rgba(131,60,246,0.08), transparent),
+                radial-gradient(ellipse 500px 500px at 80% 80%, rgba(90,40,200,0.06), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .header-brand svg { width: 32px; height: 32px; }
+        .header-brand h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        .theme-btn {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .theme-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+        /* ── Main Container ── */
+        .auth-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            box-shadow:
+                0 0 60px rgba(131,60,246,0.06),
+                0 25px 50px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        /* ── Form Panels ── */
+        .form-panel {
+            display: none;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        .form-panel.active { display: block; }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Headings ── */
+        .auth-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.35rem;
+        }
+        .auth-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1.75rem;
+        }
+
+        /* ── Role Selector ── */
+        .role-label { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.6rem; display: block; }
+        .role-group {
+            display: flex;
+            background: var(--bg-input);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+            gap: 4px;
+        }
+        .role-btn {
+            flex: 1;
+            padding: 0.6rem 0;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .role-btn .material-symbols-outlined { font-size: 16px; }
+        .role-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        /* ── Inputs ── */
+        .field { margin-bottom: 1.15rem; }
+        .field-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.45rem; }
+        .field-label { font-size: 0.8rem; font-weight: 600; }
+        .field-link {
+            font-size: 0.75rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .field-link:hover { text-decoration: underline; }
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrap .material-symbols-outlined {
+            position: absolute;
+            left: 14px;
+            font-size: 18px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+        .input-wrap .toggle-pw {
+            position: absolute;
+            right: 12px;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            pointer-events: all;
+            background: none;
+            border: none;
+            padding: 0;
+            display: flex;
+        }
+        .input-wrap .toggle-pw:hover { color: var(--text-secondary); }
+        .input-field {
+            width: 100%;
+            height: 48px;
+            padding: 0 44px 0 46px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field::placeholder { color: var(--text-muted); }
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .password-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* ── Buttons ── */
+        .btn-primary {
+            width: 100%;
+            height: 48px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+            box-shadow: 0 6px 24px var(--primary-glow);
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+        }
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 8px 30px rgba(131,60,246,0.35);
+        }
+        .btn-primary:active { transform: scale(0.985); }
+        .btn-primary .material-symbols-outlined { font-size: 20px; }
+
+        /* ── Switch Link ── */
+        .switch-row {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .switch-link {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .switch-link:hover { text-decoration: underline; }
+
+        /* ── Trust Badge ── */
+        .trust-badge {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* ── Terms ── */
+        .terms {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .terms a { color: var(--text-secondary); text-decoration: underline; }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 1.25rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ── Pagination Dots ── */
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.25rem;
+        }
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: background 0.25s;
+        }
+        .dot.active { background: var(--primary); }
+
+        /* ── Responsive ── */
+        @media (max-width: 540px) {
+            .auth-card { padding: 2rem 1.25rem; }
+            .password-row { grid-template-columns: 1fr; }
+            .header { padding: 0.75rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════ HEADER ═══════════ -->
+    <header class="header">
+        <a href="code.html" class="header-brand">
+            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0)">
+                    <path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+                </g>
+                <defs><clipPath id="clip0"><rect fill="white" height="48" width="48"></rect></clipPath></defs>
+            </svg>
+            <h2>Smart Healthcare</h2>
+        </a>
+        <button class="theme-btn" id="themeToggle" title="Toggle Theme">
+            <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+    </header>
+
+    <!-- ═══════════ AUTH CARD ═══════════ -->
+    <main class="auth-wrapper">
+        <div class="auth-card">
+
+            <!-- ────── LOGIN PANEL ────── -->
+            <div class="form-panel active" id="loginPanel">
+                <h1 class="auth-title">Disease Surveillance</h1>
+                <p class="auth-subtitle">Welcome back. Please enter your credentials to access the system.</p>
+
+                <span class="role-label">Select Role</span>
+                <div class="role-group" id="loginRoles">
+                    <button class="role-btn active" data-role="Doctor">
+                        <span class="material-symbols-outlined">stethoscope</span> Doctor
+                    </button>
+                    <button class="role-btn" data-role="Admin">
+                        <span class="material-symbols-outlined">admin_panel_settings</span> Admin
+                    </button>
+                    <button class="role-btn" data-role="Patient">
+                        <span class="material-symbols-outlined">person</span> Patient
+                    </button>
+                </div>
+
+                <form id="loginForm" autocomplete="on">
+                    <div class="field">
+                        <div class="field-header"><label class="field-label" for="loginEmail">Email Address</label></div>
+                        <div class="input-wrap">
+                            <span class="material-symbols-outlined">mail</span>
+                            <input class="input-field" id="loginEmail" type="email" placeholder="name@hospital.com" required autocomplete="email" />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-header">
+                            <label class="field-label" for="loginPassword">Password</label>
+                            <a href="#" class="field-link">Forgot password?</a>
+                        </div>
+                        <div class="input-wrap">
+                            <span class="material-symbols-outlined">lock</span>
+                            <input class="input-field" id="loginPassword" type="password" placeholder="••••••••" required autocomplete="current-password" />
+                            <button type="button" class="toggle-pw" data-target="loginPassword" title="Show password">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <span class="material-symbols-outlined">shield</span>
+                        Secure Login
+                    </button>
+                </form>
+
+                <p class="switch-row">
+                    New to the platform? <a class="switch-link" onclick="showPanel('signup')">Sign Up Now</a>
+                </p>
+
+                <div class="trust-badge">Trusted Security &nbsp;•&nbsp; HIPAA Compliant</div>
+
+                <div class="dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+
+            <!-- ────── SIGNUP PANEL ────── -->
+            <div class="form-panel" id="signupPanel">
+                <h1 class="auth-title">Create Account</h1>
+                <p class="auth-subtitle">Join the next generation of smart healthcare management</p>
+
+                <span class="role-label">Select your role</span>
+                <div class="role-group" id="signupRoles">
+                    <button class="role-btn" data-role="Doctor">
+                        <span class="material-symbols-outlined">stethoscope</span> Doctor
+                    </button>
+                    <button class="role-btn active" data-role="Patient">
+                        <span class="material-symbols-outlined">person</span> Patient
+                    </button>
+                    <button class="role-btn" data-role="Admin">
+                        <span class="material-symbols-outlined">admin_panel_settings</span> Admin
+                    </button>
+                </div>
+
+                <form id="signupForm" autocomplete="on">
+                    <div class="field">
+                        <div class="field-header"><label class="field-label" for="signupName">Full Name</label></div>
+                        <div class="input-wrap">
+                            <span class="material-symbols-outlined">person</span>
+                            <input class="input-field" id="signupName" type="text" placeholder="John Doe" required autocomplete="name" />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-header"><label class="field-label" for="signupEmail">Email Address</label></div>
+                        <div class="input-wrap">
+                            <span class="material-symbols-outlined">mail</span>
+                            <input class="input-field" id="signupEmail" type="email" placeholder="name@example.com" required autocomplete="email" />
+                        </div>
+                    </div>
+
+                    <div class="password-row">
+                        <div class="field">
+                            <div class="field-header"><label class="field-label" for="signupPw">Password</label></div>
+                            <div class="input-wrap">
+                                <span class="material-symbols-outlined">lock</span>
+                                <input class="input-field" id="signupPw" type="password" placeholder="••••••••" required autocomplete="new-password" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="field-header"><label class="field-label" for="signupPwConfirm">Confirm Password</label></div>
+                            <div class="input-wrap">
+                                <span class="material-symbols-outlined">shield_lock</span>
+                                <input class="input-field" id="signupPwConfirm" type="password" placeholder="••••••••" required autocomplete="new-password" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Create Account</button>
+                </form>
+
+                <p class="switch-row">
+                    Already have an account? <a class="switch-link" onclick="showPanel('login')">Back to Login <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">arrow_forward</span></a>
+                </p>
+
+                <div class="terms">
+                    By clicking "Create Account", you agree to our
+                    <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                </div>
+
+                <div class="dots">
+                    <span class="dot"></span>
+                    <span class="dot active"></span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer class="footer">
+        System Version 2.4.0 &nbsp;© 2024 Smart Healthcare Systems. All rights reserved.
+    </footer>
+
+    <!-- ═══════════ SCRIPTS ═══════════ -->
+    <script>
+        // ── Panel Switching ──
+        function showPanel(panel) {
+            document.getElementById('loginPanel').classList.toggle('active', panel === 'login');
+            document.getElementById('signupPanel').classList.toggle('active', panel === 'signup');
+        }
+
+        // ── Role Selectors ──
+        document.querySelectorAll('.role-group').forEach(group => {
+            group.addEventListener('click', e => {
+                const btn = e.target.closest('.role-btn');
+                if (!btn) return;
+                group.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // ── Password Visibility Toggle ──
+        document.querySelectorAll('.toggle-pw').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.dataset.target);
+                const icon = btn.querySelector('.material-symbols-outlined');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.textContent = 'visibility_off';
+                } else {
+                    input.type = 'password';
+                    icon.textContent = 'visibility';
+                }
+            });
+        });
+
+        // ── Form Submissions ──
+        document.getElementById('loginForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const role = document.querySelector('#loginRoles .role-btn.active')?.dataset.role || 'Patient';
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) return;
+
+            // Save session
+            const session = {
+                loggedIn: true,
+                role: role,
+                email: email,
+                name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                loginTime: new Date().toISOString()
+            };
+            localStorage.setItem('shSession', JSON.stringify(session));
+
+            // Redirect based on role
+            const dest = role === 'Admin' ? 'adminindex.html' : role === 'Doctor' ? 'doctorindex.html' : 'userindex.html';
+            window.location.href = dest;
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const pw = document.getElementById('signupPw').value;
+            const pw2 = document.getElementById('signupPwConfirm').value;
+            if (pw !== pw2) { alert('Passwords do not match!'); return; }
+
+            const role = document.querySelector('#signupRoles .role-btn.active')?.dataset.role || 'Patient';
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+
+            if (!name || !email || !pw) return;
+
+            // Save session
+            const session = {
+                loggedIn: true,
+                role: role,
+                email: email,
+                name: name,
+                loginTime: new Date().toISOString()
+            };
+            localStorage.setItem('shSession', JSON.stringify(session));
+
+            // Redirect based on role
+            const dest = role === 'Admin' ? 'adminindex.html' : role === 'Doctor' ? 'doctorindex.html' : 'userindex.html';
+            window.location.href = dest;
+        });
+
+        // ── URL Hash Navigation ──
+        if (window.location.hash === '#signup') showPanel('signup');
+
+        // ── If already logged in, redirect to dashboard ──
+        (function() {
+            try {
+                const s = JSON.parse(localStorage.getItem('shSession'));
+                if (s && s.loggedIn) {
+                    const d = s.role === 'Admin' ? 'adminindex.html' : s.role === 'Doctor' ? 'doctorindex.html' : 'userindex.html';
+                    window.location.href = d;
+                }
+            } catch {}
+        })();
+    </script>
+
+</body>
+</html>

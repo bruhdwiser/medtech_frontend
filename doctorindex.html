@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Doctor Dashboard | Smart Healthcare</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--p:#833cf6;--pg:rgba(131,60,246,.25);--ph:#9a5dfc;--ps:rgba(131,60,246,.12);--bd:#0d0a14;--bc:#151020;--bi:#1c1630;--br:#2a2240;--bl:#352d4a;--t1:#f1f0f5;--t2:#9891a8;--tm:#6b6380;--g:#22c55e;--gs:rgba(34,197,94,.12);--a:#f59e0b;--as:rgba(245,158,11,.12);--r:#ef4444;--rs:rgba(239,68,68,.12);--b:#3b82f6;--bs:rgba(59,130,246,.12)}
+body{font-family:'Inter',sans-serif;background:var(--bd);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+/* Header */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;border-bottom:1px solid var(--br);position:sticky;top:0;background:rgba(13,10,20,.88);backdrop-filter:blur(16px);z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.7rem;color:var(--p)}
+.hdr-brand svg{width:30px;height:30px}
+.hdr-brand h2{font-size:1.05rem;font-weight:700;color:var(--t1)}
+.hdr-r{display:flex;align-items:center;gap:.7rem}
+.ib{width:38px;height:38px;border-radius:10px;background:var(--bi);border:1px solid var(--br);color:var(--t2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;font-family:inherit}
+.ib:hover{background:var(--ps);border-color:var(--p);color:var(--p)}
+.av{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--p),#6320c9);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#fff;border:2px solid var(--br)}
+.pg{max-width:1200px;margin:0 auto;padding:2rem 1.5rem 3rem;position:relative;z-index:5}
+/* Welcome */
+.welcome{margin-bottom:1.5rem}
+.welcome h1{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.welcome p{font-size:.82rem;color:var(--t2);margin-top:.2rem}
+/* Stats */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.sc{background:var(--bc);border:1px solid var(--br);border-radius:14px;padding:1.15rem;transition:.2s}
+.sc:hover{border-color:var(--bl);transform:translateY(-2px)}
+.si{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:.65rem}
+.si .material-symbols-outlined{font-size:22px}
+.si.pu{background:var(--ps);color:var(--p)}.si.gr{background:var(--gs);color:var(--g)}.si.am{background:var(--as);color:var(--a)}.si.bl{background:var(--bs);color:var(--b)}
+.sv{font-size:1.4rem;font-weight:800;letter-spacing:-.03em}.sl{font-size:.72rem;color:var(--tm);margin-top:.1rem}
+/* Tabs */
+.tabs{display:flex;gap:4px;background:var(--bi);padding:4px;border-radius:12px;margin-bottom:1.5rem}
+.tab{flex:1;padding:.6rem;text-align:center;font-size:.78rem;font-weight:600;color:var(--t2);border:none;background:0;border-radius:9px;cursor:pointer;transition:.25s;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit}
+.tab .material-symbols-outlined{font-size:17px}
+.tab.active{background:var(--p);color:#fff;box-shadow:0 4px 14px var(--pg)}
+/* Sections */
+.sec{background:var(--bc);border:1px solid var(--br);border-radius:14px;margin-bottom:1.5rem;overflow:hidden;display:none}
+.sec.active{display:block;animation:fi .35s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--br)}
+.st{display:flex;align-items:center;gap:.5rem;font-size:1rem;font-weight:700}
+.st .material-symbols-outlined{font-size:20px;color:var(--p)}
+.sb{padding:1.25rem 1.5rem}
+/* Search */
+.search-wrap{position:relative;margin-bottom:1rem}
+.search-wrap .material-symbols-outlined{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--tm)}
+.search-inp{width:100%;height:42px;padding:0 1rem 0 42px;background:var(--bi);border:1px solid var(--br);border-radius:10px;color:var(--t1);font-family:inherit;font-size:.82rem;outline:0;transition:.2s}
+.search-inp:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pg)}
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-grid.c3{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:.3rem}
+.field.full{grid-column:1/-1}
+.field label{font-size:.7rem;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.06em}
+.field input,.field select,.field textarea{background:var(--bi);border:1px solid var(--br);border-radius:10px;padding:.6rem .85rem;color:var(--t1);font-family:inherit;font-size:.82rem;outline:0;transition:.2s;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pg)}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%236b6380'><path d='M7 10l5 5 5-5z'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+.btn-row{display:flex;gap:.75rem;margin-top:1rem;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:.6rem 1.25rem;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:.2s}
+.btn .material-symbols-outlined{font-size:17px}
+.btn-primary{background:var(--p);color:#fff;box-shadow:0 4px 14px var(--pg)}.btn-primary:hover{background:var(--ph)}
+.btn-outline{background:0;color:var(--t2);border:1px solid var(--br)}.btn-outline:hover{border-color:var(--p);color:var(--p)}
+/* Table */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:.68rem;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.06em;padding:.6rem .75rem;border-bottom:1px solid var(--br)}
+.tbl td{padding:.75rem;font-size:.8rem;border-bottom:1px solid rgba(42,34,64,.4);vertical-align:middle}
+.tbl tr:hover td{background:rgba(131,60,246,.04)}
+.tbl .name-cell{display:flex;align-items:center;gap:.65rem}
+.tbl .av-xs{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.65rem;color:#fff;flex-shrink:0}
+.tbl .nm{font-weight:600}.tbl .sub{font-size:.68rem;color:var(--t2)}
+.badge{padding:.2rem .55rem;border-radius:20px;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.badge.g{background:var(--gs);color:var(--g)}.badge.b{background:var(--bs);color:var(--b)}.badge.a{background:var(--as);color:var(--a)}.badge.r{background:var(--rs);color:var(--r)}
+/* Appointment Cards */
+.appt-list{display:flex;flex-direction:column;gap:.75rem}
+.appt-card{background:var(--bi);border:1px solid var(--br);border-radius:12px;padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;transition:.2s}
+.appt-card:hover{border-color:var(--bl)}
+.appt-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.appt-icon .material-symbols-outlined{font-size:20px}
+.appt-body{flex:1;min-width:0}
+.appt-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.25rem}
+.appt-name{font-size:.88rem;font-weight:700}
+.appt-id{font-size:.68rem;color:var(--t2)}
+.appt-meta{font-size:.72rem;color:var(--t2);margin-bottom:.35rem}
+.appt-findings{font-size:.75rem;color:var(--t2);background:var(--bc);border:1px solid var(--br);border-radius:8px;padding:.55rem .75rem;margin-top:.4rem;line-height:1.5}
+.appt-findings strong{color:var(--t1);font-weight:600}
+.appt-actions{display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap}
+.appt-actions .btn{font-size:.72rem;padding:.35rem .75rem}
+/* Prescription Cards */
+.rx-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.rx-card{background:var(--bi);border:1px solid var(--br);border-radius:12px;padding:1rem}
+.rx-card:hover{border-color:var(--bl)}
+.rx-top{display:flex;align-items:center;gap:.65rem;margin-bottom:.5rem}
+.rx-av{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.6rem;color:#fff;flex-shrink:0}
+.rx-name{font-size:.82rem;font-weight:700}.rx-sub{font-size:.68rem;color:var(--t2)}
+.rx-items{display:flex;flex-direction:column;gap:.35rem}
+.rx-item{display:flex;align-items:center;gap:.5rem;font-size:.75rem;padding:.35rem .6rem;background:var(--bc);border-radius:7px}
+.rx-item .material-symbols-outlined{font-size:15px;color:var(--p)}
+.rx-dose{color:var(--t2);margin-left:auto;font-size:.68rem}
+/* Toast */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--g);color:#fff;padding:.7rem 1.4rem;border-radius:12px;font-size:.82rem;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 10px 30px rgba(0,0,0,.4);transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:200;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.ftr{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--tm);border-top:1px solid var(--br)}
+@media(max-width:900px){.sg{grid-template-columns:1fr 1fr}.form-grid,.form-grid.c3{grid-template-columns:1fr}.rx-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.tabs{flex-wrap:wrap}.hdr{padding:.75rem 1rem}.pg{padding:1rem}}
+    </style>
+</head>
+<body>
+<script>
+(function(){
+    try{
+        const s=JSON.parse(localStorage.getItem('shSession'));
+        if(!s||!s.loggedIn){window.location.href='auth.html';return}
+        if(s.role!=='Doctor'){window.location.href='userindex.html';return}
+        window.__user=s;
+    }catch{window.location.href='auth.html'}
+})();
+</script>
+
+<header class="hdr">
+    <a href="doctorindex.html" class="hdr-brand">
+        <svg fill="none" viewBox="0 0 48 48"><g clip-path="url(#cd)"><path clip-rule="evenodd" d="M24 .757 47.243 24 24 47.243.757 24 24 .757ZM21 35.757V12.243L9.243 24 21 35.757Z" fill="currentColor" fill-rule="evenodd"/></g><defs><clipPath id="cd"><rect fill="#fff" height="48" width="48"/></clipPath></defs></svg>
+        <h2>Smart Healthcare — Doctor</h2>
+    </a>
+    <div class="hdr-r">
+        <div class="av" id="hdrAv" title="Doctor">DR</div>
+        <button class="ib" title="Logout" id="logoutBtn" style="color:var(--r)"><span class="material-symbols-outlined">logout</span></button>
+    </div>
+</header>
+
+<div class="pg">
+    <div class="welcome"><h1 id="welcomeName">Welcome, Doctor</h1><p>Manage patients, appointments, and prescriptions</p></div>
+
+    <div class="sg">
+        <div class="sc"><div class="si pu"><span class="material-symbols-outlined">groups</span></div><div class="sv" id="statPat">24</div><div class="sl">My Patients</div></div>
+        <div class="sc"><div class="si gr"><span class="material-symbols-outlined">calendar_month</span></div><div class="sv">8</div><div class="sl">Today's Appointments</div></div>
+        <div class="sc"><div class="si am"><span class="material-symbols-outlined">medication</span></div><div class="sv">15</div><div class="sl">Active Prescriptions</div></div>
+        <div class="sc"><div class="si bl"><span class="material-symbols-outlined">lab_profile</span></div><div class="sv">6</div><div class="sl">Pending Reports</div></div>
+    </div>
+
+    <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="newPatient"><span class="material-symbols-outlined">person_add</span> New Patient</button>
+        <button class="tab" data-tab="profiles"><span class="material-symbols-outlined">groups</span> Patient Profiles</button>
+        <button class="tab" data-tab="appointments"><span class="material-symbols-outlined">calendar_month</span> Appointments & Rx</button>
+    </div>
+
+    <!-- NEW PATIENT -->
+    <div class="sec active" id="newPatient">
+        <div class="sh"><span class="st"><span class="material-symbols-outlined">person_add</span> Register New Patient</span></div>
+        <div class="sb">
+            <form id="newPatientForm">
+                <div class="form-grid">
+                    <div class="field"><label for="npName">Full Name</label><input id="npName" placeholder="e.g. Arjun Mehta" required/></div>
+                    <div class="field"><label for="npEmail">Email</label><input id="npEmail" type="email" placeholder="patient@email.com"/></div>
+                    <div class="field"><label for="npPhone">Phone</label><input id="npPhone" type="tel" placeholder="+91 98765 43210" required/></div>
+                    <div class="field"><label for="npDob">Date of Birth</label><input id="npDob" type="date" required/></div>
+                    <div class="field"><label for="npGender">Gender</label>
+                        <select id="npGender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
+                    </div>
+                    <div class="field"><label for="npBlood">Blood Group</label>
+                        <select id="npBlood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+                    </div>
+                    <div class="field full"><label for="npAddress">Address / Location</label><input id="npAddress" placeholder="City, State"/></div>
+                    <div class="field"><label for="npAllergies">Known Allergies</label><input id="npAllergies" placeholder="e.g. Penicillin, Shellfish"/></div>
+                    <div class="field"><label for="npConditions">Existing Conditions</label><input id="npConditions" placeholder="e.g. Diabetes, Hypertension"/></div>
+                    <div class="field full"><label for="npNotes">Initial Notes</label><textarea id="npNotes" rows="3" placeholder="Chief complaint, referral notes…"></textarea></div>
+                </div>
+                <div class="btn-row">
+                    <button type="reset" class="btn btn-outline"><span class="material-symbols-outlined">restart_alt</span> Reset</button>
+                    <button type="submit" class="btn btn-primary"><span class="material-symbols-outlined">person_add</span> Register Patient</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PATIENT PROFILES -->
+    <div class="sec" id="profiles">
+        <div class="sh"><span class="st"><span class="material-symbols-outlined">groups</span> My Patients</span></div>
+        <div class="sb">
+            <div class="search-wrap"><span class="material-symbols-outlined">search</span><input class="search-inp" id="patSearch" placeholder="Search by patient name, ID, or condition…"/></div>
+            <div style="overflow-x:auto">
+            <table class="tbl" id="patTable">
+                <thead><tr><th>Patient</th><th>Age/Gender</th><th>Blood</th><th>Location</th><th>Conditions</th><th>Last Visit</th><th>Actions</th></tr></thead>
+                <tbody>
+                    <tr><td><div class="name-cell"><div class="av-xs" style="background:linear-gradient(135deg,#833cf6,#6320c9)">AM</div><div><div class="nm">Arjun Mehta</div><div class="sub">SH-2024-07821</div></div></div></td><td>28 / M</td><td>B+</td><td>Mumbai, MH</td><td><span class="badge a">Spondylosis</span></td><td>Mar 10</td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="viewHealthCard('Arjun Mehta')"><span class="material-symbols-outlined" style="font-size:14px">badge</span> Card</button></td></tr>
+                    <tr><td><div class="name-cell"><div class="av-xs" style="background:linear-gradient(135deg,#e91e63,#c2185b)">PS</div><div><div class="nm">Priya Singh</div><div class="sub">SH-2024-03156</div></div></div></td><td>34 / F</td><td>A+</td><td>Delhi, DL</td><td><span class="badge r">Dengue</span></td><td>Mar 5</td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="viewHealthCard('Priya Singh')"><span class="material-symbols-outlined" style="font-size:14px">badge</span> Card</button></td></tr>
+                    <tr><td><div class="name-cell"><div class="av-xs" style="background:linear-gradient(135deg,#ff9800,#e65100)">RK</div><div><div class="nm">Rahul Kumar</div><div class="sub">SH-2024-05490</div></div></div></td><td>45 / M</td><td>O+</td><td>Chennai, TN</td><td><span class="badge a">Diabetes T2</span></td><td>Mar 1</td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="viewHealthCard('Rahul Kumar')"><span class="material-symbols-outlined" style="font-size:14px">badge</span> Card</button></td></tr>
+                    <tr><td><div class="name-cell"><div class="av-xs" style="background:linear-gradient(135deg,#4caf50,#2e7d32)">AN</div><div><div class="nm">Ananya Nair</div><div class="sub">SH-2024-08912</div></div></div></td><td>22 / F</td><td>AB-</td><td>Kochi, KL</td><td><span class="badge b">Viral Fever</span></td><td>Mar 8</td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="viewHealthCard('Ananya Nair')"><span class="material-symbols-outlined" style="font-size:14px">badge</span> Card</button></td></tr>
+                    <tr><td><div class="name-cell"><div class="av-xs" style="background:linear-gradient(135deg,#2196f3,#1565c0)">VR</div><div><div class="nm">Vikram Rao</div><div class="sub">SH-2023-01234</div></div></div></td><td>56 / M</td><td>O-</td><td>Hyderabad, TS</td><td><span class="badge r">COVID-19</span></td><td>Mar 10</td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="viewHealthCard('Vikram Rao')"><span class="material-symbols-outlined" style="font-size:14px">badge</span> Card</button></td></tr>
+                    <tr><td><div class="name-cell"><div class="av-xs" style="background:linear-gradient(135deg,#9c27b0,#6a1b9a)">SD</div><div><div class="nm">Sneha Desai</div><div class="sub">SH-2024-06780</div></div></div></td><td>31 / F</td><td>A-</td><td>Pune, MH</td><td><span class="badge g">Healthy</span></td><td>Feb 20</td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="viewHealthCard('Sneha Desai')"><span class="material-symbols-outlined" style="font-size:14px">badge</span> Card</button></td></tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPOINTMENTS & PRESCRIPTIONS -->
+    <div class="sec" id="appointments">
+        <div class="sh"><span class="st"><span class="material-symbols-outlined">calendar_month</span> Appointments & Prescriptions</span></div>
+        <div class="sb">
+            <div class="search-wrap"><span class="material-symbols-outlined">search</span><input class="search-inp" id="apptSearch" placeholder="Search by patient name or ID…"/></div>
+
+            <h3 style="font-size:.85rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:6px"><span class="material-symbols-outlined" style="font-size:18px;color:var(--p)">event_note</span> Recent Appointments & Diagnostics</h3>
+            <div class="appt-list" id="apptList">
+                <div class="appt-card" data-search="Arjun Mehta SH-2024-07821">
+                    <div class="appt-icon" style="background:var(--ps);color:var(--p)"><span class="material-symbols-outlined">event_available</span></div>
+                    <div class="appt-body">
+                        <div class="appt-top"><span class="appt-name">Arjun Mehta</span><span class="badge g">Completed</span></div>
+                        <div class="appt-id">SH-2024-07821</div>
+                        <div class="appt-meta">Mar 10, 2024 • 10:30 AM — Follow-up: Cervical Spondylosis</div>
+                        <div class="appt-findings"><strong>Findings:</strong> Neck mobility improved 40%. Advised continued physiotherapy. MRI shows reduced disc bulge at C5-C6. Pain score reduced from 7 to 3.</div>
+                        <div class="appt-actions">
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">edit_note</span> Edit Notes</button>
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">picture_as_pdf</span> Export Report</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="appt-card" data-search="Priya Singh SH-2024-03156">
+                    <div class="appt-icon" style="background:var(--rs);color:var(--r)"><span class="material-symbols-outlined">emergency</span></div>
+                    <div class="appt-body">
+                        <div class="appt-top"><span class="appt-name">Priya Singh</span><span class="badge r">Critical</span></div>
+                        <div class="appt-id">SH-2024-03156</div>
+                        <div class="appt-meta">Mar 5, 2024 • 2:15 PM — Emergency: Suspected Dengue</div>
+                        <div class="appt-findings"><strong>Findings:</strong> Platelet count 45,000/μL (critical low). NS1 antigen positive. IV fluids initiated. Admitted for observation. Platelet transfusion ordered.</div>
+                        <div class="appt-actions">
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">edit_note</span> Edit Notes</button>
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">picture_as_pdf</span> Export Report</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="appt-card" data-search="Rahul Kumar SH-2024-05490">
+                    <div class="appt-icon" style="background:var(--as);color:var(--a)"><span class="material-symbols-outlined">monitor_heart</span></div>
+                    <div class="appt-body">
+                        <div class="appt-top"><span class="appt-name">Rahul Kumar</span><span class="badge a">Follow-up</span></div>
+                        <div class="appt-id">SH-2024-05490</div>
+                        <div class="appt-meta">Mar 1, 2024 • 11:00 AM — Diabetes Management Review</div>
+                        <div class="appt-findings"><strong>Findings:</strong> HbA1c improved from 8.2% to 7.1%. Fasting sugar 118 mg/dL. Continuing Metformin 500mg BD. Added morning walk routine. Next review in 3 months.</div>
+                        <div class="appt-actions">
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">edit_note</span> Edit Notes</button>
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">picture_as_pdf</span> Export Report</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="appt-card" data-search="Vikram Rao SH-2023-01234">
+                    <div class="appt-icon" style="background:var(--bs);color:var(--b)"><span class="material-symbols-outlined">vaccines</span></div>
+                    <div class="appt-body">
+                        <div class="appt-top"><span class="appt-name">Vikram Rao</span><span class="badge r">Critical</span></div>
+                        <div class="appt-id">SH-2023-01234</div>
+                        <div class="appt-meta">Mar 10, 2024 • 4:00 PM — COVID-19 + Hypertension Check</div>
+                        <div class="appt-findings"><strong>Findings:</strong> RT-PCR positive (CT value 22). SpO2 93% on room air. BP 160/100. Started Remdesivir, prone positioning. ICU monitoring initiated.</div>
+                        <div class="appt-actions">
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">edit_note</span> Edit Notes</button>
+                            <button class="btn btn-outline"><span class="material-symbols-outlined">picture_as_pdf</span> Export Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="font-size:.85rem;font-weight:700;margin:1.5rem 0 .75rem;display:flex;align-items:center;gap:6px"><span class="material-symbols-outlined" style="font-size:18px;color:var(--g)">medication</span> Active Prescriptions</h3>
+            <div class="rx-grid" id="rxGrid">
+                <div class="rx-card" data-search="Arjun Mehta SH-2024-07821">
+                    <div class="rx-top"><div class="rx-av" style="background:linear-gradient(135deg,#833cf6,#6320c9)">AM</div><div><div class="rx-name">Arjun Mehta</div><div class="rx-sub">SH-2024-07821 • Mar 10</div></div></div>
+                    <div class="rx-items">
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Aceclofenac 100mg <span class="rx-dose">1 × 2/day</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Thiocolchicoside 4mg <span class="rx-dose">1 × 2/day</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Pantoprazole 40mg <span class="rx-dose">1 × daily</span></div>
+                    </div>
+                </div>
+                <div class="rx-card" data-search="Priya Singh SH-2024-03156">
+                    <div class="rx-top"><div class="rx-av" style="background:linear-gradient(135deg,#e91e63,#c2185b)">PS</div><div><div class="rx-name">Priya Singh</div><div class="rx-sub">SH-2024-03156 • Mar 5</div></div></div>
+                    <div class="rx-items">
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Paracetamol 500mg <span class="rx-dose">SOS (max 4/day)</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> ORS Solution <span class="rx-dose">3L/day</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> IV NS + RL <span class="rx-dose">Continuous</span></div>
+                    </div>
+                </div>
+                <div class="rx-card" data-search="Rahul Kumar SH-2024-05490">
+                    <div class="rx-top"><div class="rx-av" style="background:linear-gradient(135deg,#ff9800,#e65100)">RK</div><div><div class="rx-name">Rahul Kumar</div><div class="rx-sub">SH-2024-05490 • Mar 1</div></div></div>
+                    <div class="rx-items">
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Metformin 500mg <span class="rx-dose">1 × 2/day</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Atorvastatin 10mg <span class="rx-dose">1 at night</span></div>
+                    </div>
+                </div>
+                <div class="rx-card" data-search="Vikram Rao SH-2023-01234">
+                    <div class="rx-top"><div class="rx-av" style="background:linear-gradient(135deg,#2196f3,#1565c0)">VR</div><div><div class="rx-name">Vikram Rao</div><div class="rx-sub">SH-2023-01234 • Mar 10</div></div></div>
+                    <div class="rx-items">
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Remdesivir 200mg <span class="rx-dose">IV Day 1</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Dexamethasone 6mg <span class="rx-dose">1 × daily</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Enoxaparin 40mg <span class="rx-dose">SC daily</span></div>
+                        <div class="rx-item"><span class="material-symbols-outlined">medication</span> Amlodipine 5mg <span class="rx-dose">1 × daily</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"><span class="material-symbols-outlined">check_circle</span><span id="toastMsg">Done</span></div>
+<footer class="ftr">Doctor Console v2.4.0 &nbsp;© 2024 Smart Healthcare Systems. All rights reserved.</footer>
+
+<script>
+// Toast
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+
+// Tabs
+document.getElementById('tabs').addEventListener('click',e=>{
+    const t=e.target.closest('.tab');if(!t)return;
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));t.classList.add('active');
+    document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+    document.getElementById(t.dataset.tab).classList.add('active');
+});
+
+// Patient Search
+document.getElementById('patSearch').addEventListener('input',function(){
+    const q=this.value.toLowerCase();
+    document.querySelectorAll('#patTable tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none'});
+});
+
+// Appointments & Rx Search
+document.getElementById('apptSearch').addEventListener('input',function(){
+    const q=this.value.toLowerCase();
+    document.querySelectorAll('.appt-card').forEach(c=>{c.style.display=(c.dataset.search||'').toLowerCase().includes(q)||c.textContent.toLowerCase().includes(q)?'':'none'});
+    document.querySelectorAll('.rx-card').forEach(c=>{c.style.display=(c.dataset.search||'').toLowerCase().includes(q)||c.textContent.toLowerCase().includes(q)?'':'none'});
+});
+
+// New Patient Form
+document.getElementById('newPatientForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    const name=document.getElementById('npName').value.trim();
+    if(!name)return;
+    const id='SH-2024-'+String(Math.floor(10000+Math.random()*90000));
+    // Add to patient table
+    const ini=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const gender=document.getElementById('npGender').value;
+    const blood=document.getElementById('npBlood').value;
+    const loc=document.getElementById('npAddress').value||'—';
+    const conds=document.getElementById('npConditions').value||'—';
+    const colors=['#833cf6','#e91e63','#ff9800','#4caf50','#2196f3','#9c27b0','#00bcd4','#ff5722'];
+    const c=colors[Math.floor(Math.random()*colors.length)];
+    const row=document.createElement('tr');
+    row.style.animation='fi .35s ease';
+    row.innerHTML=`<td><div class="name-cell"><div class="av-xs" style="background:linear-gradient(135deg,${c},${c}cc)">${ini}</div><div><div class="nm">${name}</div><div class="sub">${id}</div></div></div></td><td>— / ${gender?gender[0]:'—'}</td><td>${blood||'—'}</td><td>${loc}</td><td>${conds!=='—'?'<span class="badge a">'+conds+'</span>':'<span class="badge g">New</span>'}</td><td>Today</td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="viewHealthCard('${name}')"><span class="material-symbols-outlined" style="font-size:14px">badge</span> Card</button></td>`;
+    const tbody=document.querySelector('#patTable tbody');
+    tbody.insertBefore(row,tbody.firstChild);
+    // Update stat
+    const stat=document.getElementById('statPat');stat.textContent=parseInt(stat.textContent)+1;
+    showToast(`Patient "${name}" registered — ID: ${id}`);
+    this.reset();
+});
+
+// View Health Card
+function viewHealthCard(name){window.location.href='healthcard.html'}
+
+// Auth populate & logout
+(function(){
+    const u=window.__user;if(!u)return;
+    const p=u.name.split(' '),ini=p.length>=2?(p[0][0]+p[p.length-1][0]).toUpperCase():u.name.substring(0,2).toUpperCase();
+    document.getElementById('hdrAv').textContent=ini;document.getElementById('hdrAv').title=u.name;
+    document.getElementById('welcomeName').textContent='Welcome, Dr. '+u.name;
+    document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.removeItem('shSession');window.location.href='auth.html'});
+})();
+</script>
+</body>
+</html>
